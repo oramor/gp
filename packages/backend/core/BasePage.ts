@@ -6,7 +6,7 @@ interface TemplatePlaceholders {
 }
 
 export class BasePage {
-    private newTemplate(source: string) {
+    private newTemplate(source: string): HandlebarsTemplateDelegate {
         return Handlebars.compile(source)
     }
 

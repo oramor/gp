@@ -5,6 +5,6 @@
         "target": "ESNext",
         "moduleResolution": "Node",
         "allowSyntheticDefaultImports": true,
-        "useUnknownInCatchVariables": false
+        "useUnknownInCatchVariables": false,
     }
 }
