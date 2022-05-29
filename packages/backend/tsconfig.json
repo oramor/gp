@@ -1,0 +1,10 @@
+{
+    "extends": "../../tsconfig",
+    "compilerOptions": {
+        "outDir": "dist",
+        "target": "ESNext",
+        "moduleResolution": "Node",
+        "allowSyntheticDefaultImports": true,
+        "useUnknownInCatchVariables": false
+    }
+}

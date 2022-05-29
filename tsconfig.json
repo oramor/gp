@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "exactOptionalPropertyTypes": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": true,
+        "noImplicitOverride": false,
+        "noImplicitReturns": true,
+        "strict": true,
+        "useUnknownInCatchVariables": true,
+        "noImplicitThis": true,
+        "noPropertyAccessFromIndexSignature": true,
+    }
+}

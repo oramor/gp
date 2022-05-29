@@ -1,0 +1,27 @@
+{
+  "name": "react-ssr",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/romaro83/react-ssr.git"
+  },
+  "author": "Roman Rodin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/romaro83/react-ssr/issues"
+  },
+  "homepage": "https://github.com/romaro83/react-ssr#readme",
+  "dependencies": {
+    "fastify": "^4.0.0-rc.3",
+    "handlebars": "^4.7.7"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.36"
+  }
+}
