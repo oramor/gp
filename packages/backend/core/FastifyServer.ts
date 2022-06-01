@@ -1,10 +1,10 @@
 import fastify, { FastifyInstance, RouteOptions, preHandlerHookHandler } from "fastify";
 
 export class FastifyServer {
-    engine: FastifyInstance;
-    preHandlers: preHandlerHookHandler[];
+    private engine: FastifyInstance;
+    private preHandlers: preHandlerHookHandler[];
 
-    constructor() {
+    constructor(private g: GlobalContext) {
         this.engine = fastify({
             logger: true
         });
@@ -12,8 +12,8 @@ export class FastifyServer {
         this.preHandlers = [];
     }
 
-    public listen(port: number) {
-        this.engine.listen({ port }, (err) => {
+    public start() {
+        this.engine.listen({ port: this.g.config.port }, (err) => {
             if (err) throw err
         });
     }
@@ -42,5 +42,15 @@ export class FastifyServer {
 
     private addRoute(obj: RouteOptions) {
         this.engine.route(obj);
+    }
+
+    public async shutdown(code: ShutdownCode) {
+        console.log(`Terminating with code: ${code}`)
+        try {
+            process.exit(0);
+        } catch (err) {
+            console.error(err.message);
+            process.exit(1);
+        }
     }
 }
