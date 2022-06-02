@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "rootDir": ".",
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "allowUnreachableCode": false,
@@ -13,5 +14,16 @@
         "useUnknownInCatchVariables": true,
         "noImplicitThis": true,
         "noPropertyAccessFromIndexSignature": true,
-    }
+    },
+    "references": [
+        {
+            "path": "./packages/backend"
+        },
+        {
+            "path": "./packages/frontend"
+        }
+    ],
+    "include": [
+        "**/*"
+    ]
 }

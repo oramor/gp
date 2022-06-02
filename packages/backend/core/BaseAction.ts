@@ -1,20 +1,30 @@
-type JsonObject = {
-    [key: string]: string | number | JsonObject
-}
+import { GlobalContext, ActionContext } from './types/context';
+
+type ActionResultType = 'data' | 'render';
 
 type AbstractActionResult = {
     httpStatus: HttpStatus;
+    type: ActionResultType;
 }
 
-type ActionResult<T> = T & AbstractActionResult;
+export type ActionResult<T> = AbstractActionResult & T;
 
-interface SendJsonActionDto {
+export interface DataResult {
     json: JsonObject;
 }
 
+export interface PageResult {
+    placeholders: {};
+}
+
+export interface IAction {
+    run<T extends DataResult | PageResult>(g: GlobalContext, ctx: ActionContext): Promise<ActionResult<T>>;
+}
+
 export class BaseAction {
-    public static sendJson(obj: JsonObject): ActionResult<SendJsonActionDto> {
+    public static data(obj: JsonObject): ActionResult<DataResult> {
         return {
+            type: 'data',
             json: obj,
             httpStatus: 200
         }

@@ -1,5 +1,11 @@
 import { FastifyServer } from './core/FastifyServer';
-import config from '../../config';
+import { GlobalContext } from './core/types/context';
+
+const config: Config = {
+    port: 3000,
+    domain: 'localhost',
+    baseUrl: 'http://localhost'
+};
 
 async function GlobalContextConstructor(): Promise<GlobalContext> {
     return { config };

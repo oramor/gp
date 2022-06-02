@@ -1,10 +1,14 @@
 {
     "extends": "../../tsconfig",
     "compilerOptions": {
+        "strictPropertyInitialization": false,
         "outDir": "dist",
         "target": "ESNext",
         "moduleResolution": "Node",
         "allowSyntheticDefaultImports": true,
         "useUnknownInCatchVariables": false,
+        "composite": true,
+        "declaration": true,
+        "declarationMap": true
     }
 }

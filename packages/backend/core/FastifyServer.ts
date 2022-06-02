@@ -1,4 +1,5 @@
 import fastify, { FastifyInstance, RouteOptions, preHandlerHookHandler } from "fastify";
+import { GlobalContext } from "./types/context";
 
 export class FastifyServer {
     private engine: FastifyInstance;
@@ -16,10 +17,6 @@ export class FastifyServer {
         this.engine.listen({ port: this.g.config.port }, (err) => {
             if (err) throw err
         });
-    }
-
-    public addSessionMiddleware(cls) {
-        this.preHandlers.push(cls.getHandler());
     }
 
     public addFaviconMiddleware() { };
