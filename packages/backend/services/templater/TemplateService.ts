@@ -10,12 +10,13 @@ export class TemplateService {
             // If encoding param passed, readFile returns Buffer
             const template: string = await readFile(path, { encoding: 'utf-8' });
 
-            const compilier: Handlebars.TemplateDelegate<Placeholders> = Handlebars.compile(template);
+            const compilier: Handlebars.TemplateDelegate<Placeholders> =
+                Handlebars.compile(template);
 
             return compilier(placeholders);
         } catch (err) {
             // TODO Error handle
-            throw err;
+            console.log(err.message);
         }
     }
 }

@@ -1,10 +1,11 @@
 import { ActionContext, GlobalContext } from './types/utils';
 
-export interface PageInstance extends BasePage {
+export interface IConcretePageServ extends BasePageServ {
     httpStatus: HttpStatus;
 }
 
-export class BasePage {
+export class BasePageServ {
+    declare httpStatus: HttpStatus;
     protected templateDir: string;
     private templater;
 
@@ -13,18 +14,18 @@ export class BasePage {
      * по ссылкам вида props.placeholderName. Могут быть переданы в props
      * при инициализации страницы, либо через вызов метода setPlaceholder()
      */
-    private propsPlaceholders: Placeholders;
+    private propsPlaceholders: PlaceholdersNode;
 
     /**
      * В отличие от propsPlaceholders, эти плейсхолдеры явно прописываются
      * в классе страницы. Это максимально статичные данные.
      */
-    private staticPlaceholders: Placeholders;
+    private staticPlaceholders: PlaceholdersNode;
 
     constructor(
         private g: GlobalContext,
         private ctx: ActionContext,
-        private props: Placeholders = {},
+        private props: PlaceholdersNode = {},
     ) {
         this.templateDir = this.g.config.templateDir;
         this.templater = this.g.templater;
@@ -49,7 +50,7 @@ export class BasePage {
     }
 
     /**
-     * Объект шаблонизации
+     * Объект плейсхолдеров (ObjectPlaceholders)
      * На первом уровне вложенности должны находиться только объекты.
      * Причем каждый из таких объектов группирует плейсхолдеры по источнику данных.
      * Например, в dict.sendButtonName сразу понятно, что плейсхолдер
@@ -57,7 +58,7 @@ export class BasePage {
      * А в случае с BlockName.dict.sendButtonName уже в словаре
      * подключенного к странице компонента BlockName.
      */
-    private get placeholders(): Placeholders {
+    private get placeholders(): ObjectPlaceholders {
         return {
             static: this.staticPlaceholders,
             props: this.propsPlaceholders,

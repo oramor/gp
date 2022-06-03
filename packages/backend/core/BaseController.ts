@@ -1,15 +1,12 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { ActionResult, IAction, DataResult, PageResult } from './BaseAction';
+import { IConcreteAction, ActionResult, DataResult, PageResult } from './BaseAction';
 import { ActionContext, GlobalContext } from './types/utils';
 
-export class BaseController {
+export abstract class BaseController {
     constructor(public g: GlobalContext) {}
 
-    actionRunner(action: IAction) {
-        return async (
-            req: FastifyRequest,
-            res: FastifyReply,
-        ): Promise<FastifyReply | void> => {
+    actionRunner(action: IConcreteAction) {
+        return async (req: FastifyRequest, res: FastifyReply): Promise<FastifyReply | void> => {
             const ctx: ActionContext = req;
 
             try {
