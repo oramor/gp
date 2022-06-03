@@ -1,10 +1,11 @@
 import { UrlObject } from "url";
+import { GlobalContext } from "./types/context";
 
 export class BaseUri {
     baseUrl: UrlObject;
 
-    constructor() {
-        this.baseUrl = new URL('http://localhost');
+    constructor(public g: GlobalContext) {
+        this.baseUrl = new URL(g.config.baseUrl);
     }
 
     protected getUrl(uri: string): string {

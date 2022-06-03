@@ -1,14 +1,20 @@
 import { FastifyServer } from './core/FastifyServer';
 import { GlobalContext } from './core/types/context';
 
+import { TemplateService } from './services/templater/TemplateService';
+
 const config: Config = {
     port: 3000,
     domain: 'localhost',
-    baseUrl: 'http://localhost'
+    baseUrl: 'http://localhost',
+    templateDir: '/home/romaro/react-ssr/packages/frontend/dist/public/views'
 };
 
 async function GlobalContextConstructor(): Promise<GlobalContext> {
-    return { config };
+    return {
+        templater: new TemplateService,
+        config
+    };
 }
 
 GlobalContextConstructor()

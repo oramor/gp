@@ -1,4 +1,5 @@
 import { GlobalContext, ActionContext } from './types/context';
+import { PageInstance } from './BasePage';
 
 type ActionResultType = 'data' | 'render';
 
@@ -14,7 +15,7 @@ export interface DataResult {
 }
 
 export interface PageResult {
-    placeholders: {};
+    htmlPromise: Promise<string>;
 }
 
 export interface IAction {
@@ -25,8 +26,16 @@ export class BaseAction {
     public static data(obj: JsonObject): ActionResult<DataResult> {
         return {
             type: 'data',
-            json: obj,
-            httpStatus: 200
+            httpStatus: 200,
+            json: obj
+        }
+    }
+
+    public static render(page: PageInstance): ActionResult<PageResult> {
+        return {
+            type: 'render',
+            httpStatus: page.httpStatus,
+            htmlPromise: page.render()
         }
     }
 }

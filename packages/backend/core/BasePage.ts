@@ -1,24 +1,37 @@
-import Handlebars from 'handlebars';
-import { readFile } from 'node:fs/promises';
+import { GlobalContext } from './types/context';
 
-interface TemplatePlaceholders {
-    [key: string]: string | number
+export interface PageInstance extends BasePage {
+    httpStatus: HttpStatus;
 }
 
 export class BasePage {
-    private newTemplate(source: string): HandlebarsTemplateDelegate {
-        return Handlebars.compile(source)
+    protected templateDir: string;
+    private templater;
+
+    constructor(private g: GlobalContext) {
+        this.templateDir = this.g.config.templateDir;
+        this.templater = this.g.templater;
     }
 
-    protected async render(path: string, placeholders: TemplatePlaceholders) {
+    public async render(): Promise<string> {
         try {
-            // If you passed encoding, readFile returns Buffer
-            const source = await readFile(path, { encoding: 'utf-8' });
-
-            return this.newTemplate(source)
-                .call(null, placeholders);
+            return await this.templater.render(this.templatePath, this.placeholders);
         } catch (err) {
-            console.log(err.message);
+            // Todo: mark PageError?
+            throw err;
         }
+    }
+
+    private get placeholders(): Placeholders {
+        // Todo
+        return {};
+    }
+
+    private get pageName(): string {
+        return this.constructor.name;
+    }
+
+    private get templatePath(): string {
+        return this.templateDir + '/' + this.pageName + '.html';
     }
 }
