@@ -19,7 +19,7 @@ export class FastifyServer {
         });
     }
 
-    public addFaviconMiddleware() {}
+    public addPreHandler() {}
 
     public addControllers(arr: Array<any>) {
         arr.forEach((controller) => {
