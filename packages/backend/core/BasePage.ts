@@ -1,4 +1,4 @@
-import { ActionContext, GlobalContext } from './types/context';
+import { ActionContext, GlobalContext } from './types/utils';
 
 export interface PageInstance extends BasePage {
     httpStatus: HttpStatus;

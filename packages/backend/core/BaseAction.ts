@@ -1,4 +1,4 @@
-import { GlobalContext, ActionContext } from './types/context';
+import { GlobalContext, ActionContext } from './types/utils';
 import { PageInstance } from './BasePage';
 
 type ActionResultType = 'data' | 'render';

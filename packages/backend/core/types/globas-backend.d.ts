@@ -10,7 +10,7 @@ type JsonObject = {
     [key: string]: Primitives | JsonObject | JsonObject[]
 }
 
-// Currently one-level deep
+// Currently one-level deep for each placeholder value
 type PlaceholderValue = Primitives | { [key: string]: Primitives };
 
 type Placeholders = JsonObject;

@@ -1,5 +1,5 @@
 import fastify, { FastifyInstance, RouteOptions, preHandlerHookHandler } from "fastify";
-import { GlobalContext } from "./types/context";
+import { GlobalContext } from "./types/utils";
 
 export class FastifyServer {
     private engine: FastifyInstance;

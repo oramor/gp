@@ -1,5 +1,5 @@
 import { FastifyServer } from './core/FastifyServer';
-import { GlobalContext } from './core/types/context';
+import { GlobalContext, Config } from './core/types/utils';
 
 import { TemplateService } from './services/templater/TemplateService';
 

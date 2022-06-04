@@ -1,5 +1,5 @@
 import { UrlObject } from "url";
-import { GlobalContext } from "./types/context";
+import { GlobalContext } from "./types/utils";
 
 export class BaseUri {
     baseUrl: UrlObject;

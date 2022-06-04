@@ -2,7 +2,7 @@
 
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { ActionResult, IAction, DataResult, PageResult } from './BaseAction';
-import { ActionContext, GlobalContext } from './types/context';
+import { ActionContext, GlobalContext } from './types/utils';
 
 export class BaseController {
     constructor(public g: GlobalContext) { }

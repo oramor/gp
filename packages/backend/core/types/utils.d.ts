@@ -6,4 +6,11 @@ export type GlobalContext = Readonly<{
     templater: TemplateService;
 }>;
 
-type ActionContext = {} & FastifyRequest;
+export type ActionContext = {} & FastifyRequest;
+
+export type Config = Readonly<{
+    port: number;
+    domain: string;
+    baseUrl: string;
+    templateDir: string;
+}>;
