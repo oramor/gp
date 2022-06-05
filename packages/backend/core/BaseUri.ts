@@ -1,5 +1,5 @@
-import { UrlObject } from "url";
-import { GlobalContext } from "./types/utils";
+import { UrlObject } from 'url';
+import { GlobalContext } from './types/utils';
 
 export class BaseUri {
     baseUrl: UrlObject;
@@ -11,7 +11,7 @@ export class BaseUri {
     protected getUrl(uri: string): string {
         const url: UrlObject = {
             hostname: uri,
-            ...this.baseUrl
+            ...this.baseUrl,
         };
         return url.toString();
     }

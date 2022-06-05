@@ -7,7 +7,7 @@ const config: Config = {
     port: 3000,
     domain: 'localhost',
     baseUrl: 'http://localhost',
-    templateDir: '/home/romaro/react-ssr/packages/frontend/dist/public/views',
+    templateDir: '/home/romaro/react-ssr/packages/frontend/_pub/views',
 };
 
 async function GlobalContextConstructor(): Promise<GlobalContext> {

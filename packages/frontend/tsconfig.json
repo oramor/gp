@@ -8,5 +8,12 @@
         {
             "path": "../backend"
         }
+    ],
+    "include": [
+        "**/*.ts"
+    ],
+    "exclude": [
+        "_dist",
+        "_pub"
     ]
 }

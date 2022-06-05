@@ -1,14 +1,15 @@
-/// <reference types="fastify" />
-
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { ActionResult, IAction, DataResult, PageResult } from './BaseAction';
 import { ActionContext, GlobalContext } from './types/utils';
 
 export class BaseController {
-    constructor(public g: GlobalContext) { }
+    constructor(public g: GlobalContext) {}
 
     actionRunner(action: IAction) {
-        return async (req: FastifyRequest, res: FastifyReply): Promise<FastifyReply | void> => {
+        return async (
+            req: FastifyRequest,
+            res: FastifyReply,
+        ): Promise<FastifyReply | void> => {
             const ctx: ActionContext = req;
 
             try {
@@ -21,17 +22,18 @@ export class BaseController {
                     case 'data': {
                         const rs = result as ActionResult<DataResult>;
                         return res.send(rs.json);
-                    };
+                    }
                     case 'render': {
                         const rs = result as ActionResult<PageResult>;
                         return res.send(await rs.htmlPromise);
                     }
-                    default: throw new Error('AppError: Unhandler response');
+                    default:
+                        throw new Error('AppError: Unhandler response');
                 }
             } catch (err) {
                 // ActionError
                 console.log(err.message);
             }
-        }
+        };
     }
 }

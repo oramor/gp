@@ -1,5 +1,5 @@
-import fastify, { FastifyInstance, RouteOptions, preHandlerHookHandler } from "fastify";
-import { GlobalContext } from "./types/utils";
+import fastify, { FastifyInstance, RouteOptions, preHandlerHookHandler } from 'fastify';
+import { GlobalContext } from './types/utils';
 
 export class FastifyServer {
     private engine: FastifyInstance;
@@ -7,7 +7,7 @@ export class FastifyServer {
 
     constructor(private g: GlobalContext) {
         this.engine = fastify({
-            logger: true
+            logger: true,
         });
 
         this.preHandlers = [];
@@ -15,26 +15,26 @@ export class FastifyServer {
 
     public start() {
         this.engine.listen({ port: this.g.config.port }, (err) => {
-            if (err) throw err
+            if (err) throw err;
         });
     }
 
-    public addFaviconMiddleware() { };
+    public addFaviconMiddleware() {}
 
     public addControllers(arr: Array<any>) {
-        arr.forEach(controller => {
+        arr.forEach((controller) => {
             const routes = controller.routes;
 
-            routes.forEach(router => {
+            // TODO any
+            routes.forEach((router: any) => {
                 this.addRoute({
                     method: router.method,
                     url: router.url,
                     preHandler: this.preHandlers,
-                    handler: router.handler
+                    handler: router.handler,
                 });
-            }
-            )
-        })
+            });
+        });
     }
 
     private addRoute(obj: RouteOptions) {
@@ -42,7 +42,7 @@ export class FastifyServer {
     }
 
     public async shutdown(code: ShutdownCode) {
-        console.log(`Terminating with code: ${code}`)
+        console.log(`Terminating with code: ${code}`);
         try {
             process.exit(0);
         } catch (err) {

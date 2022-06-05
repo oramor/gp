@@ -1,5 +1,5 @@
 {
-    "extends": "../../tsconfig",
+    "extends": "../../tsconfig.json",
     "compilerOptions": {
         "strictPropertyInitialization": false,
         "outDir": "_dist",
@@ -10,5 +10,11 @@
         "composite": true,
         "declaration": true,
         "declarationMap": true
-    }
+    },
+    "include": [
+        "**/*"
+    ],
+    "exclude": [
+        "_dist"
+    ]
 }

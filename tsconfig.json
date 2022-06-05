@@ -23,7 +23,7 @@
             "path": "./packages/frontend"
         }
     ],
-    "include": [
-        "**/*"
-    ]
+    "exclude": [
+        "node_modules"
+    ],
 }

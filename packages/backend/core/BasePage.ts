@@ -22,20 +22,18 @@ export class BasePage {
     private staticPlaceholders: Placeholders;
 
     constructor(
-        private g: GlobalContext, private ctx: ActionContext, private props: Placeholders = {}) {
+        private g: GlobalContext,
+        private ctx: ActionContext,
+        private props: Placeholders = {},
+    ) {
         this.templateDir = this.g.config.templateDir;
         this.templater = this.g.templater;
         this.propsPlaceholders = this.props;
         this.staticPlaceholders = {};
     }
 
-    public async render(): Promise<string> {
-        try {
-            return await this.templater.render(this.templatePath, this.placeholders);
-        } catch (err) {
-            // Todo: mark PageError?
-            throw err;
-        }
+    public render(): Promise<string> {
+        return this.templater.render(this.templatePath, this.placeholders);
     }
 
     public setPlaceholder(name: string, value: PlaceholderValue): void {
@@ -62,7 +60,7 @@ export class BasePage {
     private get placeholders(): Placeholders {
         return {
             static: this.staticPlaceholders,
-            props: this.propsPlaceholders
+            props: this.propsPlaceholders,
         };
     }
 
