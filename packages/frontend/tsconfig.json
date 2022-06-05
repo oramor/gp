@@ -10,7 +10,13 @@
         }
     ],
     "include": [
-        "**/*.ts"
+        "**/*.ts",
+        "**/*.tsx",
+        "blocks/FooterBlock/FooterBlock.tsx",
+        "../backend/blocks-serv/FooterBlock/FooterBlockServ.ts",
+        "../backend/blocks-serv/FooterBlock/FooterBlock.d.ts",
+        "../backend/blocks-serv/FooterBlock/FooterBlockDict.ts",
+        "../backend/pages-serv/MainPageServ.ts"
     ],
     "exclude": [
         "_dist",
