@@ -25,3 +25,7 @@ type PlaceholdersFrom<
     T extends ObjectPlaceholders = any,
     K extends keyof ObjectPlaceholders = any,
 > = T[K];
+
+type SupportedLangs = 'ru' | 'en';
+type DictionaryNode = Record<Required<SupportedLangs>, string>;
+type DictionaryObject = Record<string, DictionaryNode>;

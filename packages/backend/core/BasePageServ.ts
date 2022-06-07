@@ -8,6 +8,7 @@ export type PageServConstructor = new (
 
 export abstract class BasePageServ {
     abstract httpStatus: HttpStatus;
+    abstract dictionary: DictionaryObject;
     protected templatesDirAbsolutePath: string;
     private templateService;
 
