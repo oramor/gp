@@ -1,13 +1,15 @@
 import { ActionContext, GlobalContext } from './types/utils';
 
-export interface IConcretePageServ extends BasePageServ {
-    httpStatus: HttpStatus;
-}
+export type PageServConstructor = new (
+    g: GlobalContext,
+    ctx: ActionContext,
+    props?: PlaceholdersNode,
+) => BasePageServ;
 
-export class BasePageServ {
-    declare httpStatus: HttpStatus;
-    protected templateDir: string;
-    private templater;
+export abstract class BasePageServ {
+    abstract httpStatus: HttpStatus;
+    protected templatesDirAbsolutePath: string;
+    private templateService;
 
     /**
      * Плейсхолдеры уровня страницы, которые доступны в шаблонизаторе
@@ -25,16 +27,16 @@ export class BasePageServ {
     constructor(
         private g: GlobalContext,
         private ctx: ActionContext,
-        private props: PlaceholdersNode = {},
+        private props?: PlaceholdersNode,
     ) {
-        this.templateDir = this.g.config.templateDir;
-        this.templater = this.g.templater;
-        this.propsPlaceholders = this.props;
+        this.templatesDirAbsolutePath = this.g.config.templateDir;
+        this.templateService = this.g.templater;
+        this.propsPlaceholders = this.props ?? {};
         this.staticPlaceholders = {};
     }
 
     public render(): Promise<string> {
-        return this.templater.render(this.templatePath, this.placeholders);
+        return this.templateService.render(this.templatePath, this.placeholders);
     }
 
     public setPlaceholder(name: string, value: PlaceholderValue): void {
@@ -70,6 +72,6 @@ export class BasePageServ {
     }
 
     private get templatePath(): string {
-        return this.templateDir + '/' + this.pageName + '.html';
+        return this.templatesDirAbsolutePath + '/' + this.pageName + '.html';
     }
 }

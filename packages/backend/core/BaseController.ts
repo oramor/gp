@@ -1,21 +1,27 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { IConcreteAction, ActionResult, DataResult, PageResult } from './BaseAction';
-import { ActionContext, GlobalContext } from './types/utils';
+import { GlobalContext, ActionContext } from './types/utils';
+import {
+    ActionResult,
+    DataResult,
+    PageResult,
+    BaseAction,
+    ActionClassConstructor,
+} from './BaseAction';
 
 export abstract class BaseController {
     constructor(public g: GlobalContext) {}
 
-    actionRunner(action: IConcreteAction) {
+    actionRunner(actionClass: ActionClassConstructor) {
         return async (req: FastifyRequest, res: FastifyReply): Promise<FastifyReply | void> => {
             const ctx: ActionContext = req;
-
             try {
-                const result = await action.run(this.g, ctx);
+                const actionInst: BaseAction = new actionClass(this.g, ctx);
+                const result = await actionInst.run();
 
                 // Set http status code
                 res.statusCode = result.httpStatus;
 
-                switch (result.type) {
+                switch (result.resultCode) {
                     case 'data': {
                         const rs = result as ActionResult<DataResult>;
                         return res.send(rs.json);
@@ -28,7 +34,7 @@ export abstract class BaseController {
                         throw new Error('AppError: Unhandler response');
                 }
             } catch (err) {
-                // ActionError
+                // TODO ActionError
                 console.log(err.message);
             }
         };

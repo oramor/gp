@@ -1,14 +1,12 @@
 import { GlobalContext, ActionContext } from './types/utils';
 import { BasePageServ } from './BasePageServ';
 
-type ActionResultType = 'data' | 'render';
+type ActionResultCode = 'data' | 'render';
 
 type AbstractActionResult = {
+    resultCode: ActionResultCode;
     httpStatus: HttpStatus;
-    type: ActionResultType;
 };
-
-export type ActionResult<T> = AbstractActionResult & T;
 
 export interface DataResult {
     json: JsonObject;
@@ -18,27 +16,32 @@ export interface PageResult {
     htmlPromise: Promise<string>;
 }
 
-export interface IConcreteAction {
-    run<T extends DataResult | PageResult>(
-        g: GlobalContext,
-        ctx: ActionContext,
-    ): Promise<ActionResult<T>>;
-}
+export type ActionResult<T> = AbstractActionResult & T;
+
+export type ActionClassConstructor = new (g: GlobalContext, ctx: ActionContext) => BaseAction;
 
 export abstract class BaseAction {
-    public static data(obj: JsonObject): ActionResult<DataResult> {
+    abstract run(): Promise<ActionResult<DataResult | PageResult>>;
+    protected g: GlobalContext;
+    protected ctx: ActionContext;
+    constructor(...args: ConstructorParameters<ActionClassConstructor>) {
+        this.g = args[0];
+        this.ctx = args[1];
+    }
+
+    public data(obj: JsonObject): ActionResult<DataResult> {
         return {
-            type: 'data',
+            resultCode: 'data',
             httpStatus: 200,
             json: obj,
         };
     }
 
-    public static render(page: BasePageServ): ActionResult<PageResult> {
+    public render(pageServInst: BasePageServ): ActionResult<PageResult> {
         return {
-            type: 'render',
-            httpStatus: page.httpStatus,
-            htmlPromise: page.render(),
+            resultCode: 'render',
+            httpStatus: pageServInst.httpStatus,
+            htmlPromise: pageServInst.render(),
         };
     }
 }

@@ -1,18 +1,13 @@
-import { UrlObject } from 'url';
+import { URL } from 'url';
 import { GlobalContext } from './types/utils';
 
-export class BaseUri {
-    baseUrl: UrlObject;
-
+export abstract class BaseUri {
+    baseUrl: string;
     constructor(public g: GlobalContext) {
-        this.baseUrl = new URL(g.config.baseUrl);
+        this.baseUrl = g.config.baseUrl;
     }
 
-    protected getUrl(uri: string): string {
-        const url: UrlObject = {
-            hostname: uri,
-            ...this.baseUrl,
-        };
-        return url.toString();
+    protected getUrlString(uri: string): string {
+        return new URL(uri, this.baseUrl).toString();
     }
 }
