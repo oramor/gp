@@ -3,11 +3,14 @@ import { GlobalContext, Config } from './core/types/utils';
 
 import { TemplateService } from './services/templater/TemplateService';
 
+import { LangHandler } from './handlers/LangHandler';
+
 const config: Config = {
     port: 3000,
     domain: 'localhost',
     baseUrl: 'http://localhost',
     templateDir: '/home/romaro/react-ssr/packages/frontend/_pub/views',
+    defaultLang: 'ru',
 };
 
 async function GlobalContextConstructor(): Promise<GlobalContext> {
@@ -20,6 +23,8 @@ async function GlobalContextConstructor(): Promise<GlobalContext> {
 GlobalContextConstructor()
     .then((g) => {
         const server = new FastifyServer(g);
+
+        server.setPreHandlers([LangHandler]);
         server.start();
 
         process

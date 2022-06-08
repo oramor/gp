@@ -18,13 +18,13 @@ export interface PageResult {
 
 export type ActionResult<T> = AbstractActionResult & T;
 
-export type ActionClassConstructor = new (g: GlobalContext, ctx: ActionContext) => BaseAction;
+export type ActionConstructor = new (g: GlobalContext, ctx: ActionContext) => BaseAction;
 
 export abstract class BaseAction {
     abstract run(): Promise<ActionResult<DataResult | PageResult>>;
     protected g: GlobalContext;
     protected ctx: ActionContext;
-    constructor(...args: ConstructorParameters<ActionClassConstructor>) {
+    constructor(...args: ConstructorParameters<ActionConstructor>) {
         this.g = args[0];
         this.ctx = args[1];
     }

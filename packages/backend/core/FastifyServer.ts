@@ -1,5 +1,6 @@
 import fastify, { FastifyInstance, RouteOptions, preHandlerHookHandler } from 'fastify';
-import { GlobalContext } from './types/utils';
+import { GlobalContext, IRequest } from './types/utils';
+import { HandlerConstructor } from './BaseHandler';
 
 export class FastifyServer {
     private engine: FastifyInstance;
@@ -11,6 +12,17 @@ export class FastifyServer {
         });
 
         this.preHandlers = [];
+
+        /**
+         * Добавляем заготовку для локального контекста, из которого
+         * впоследствии будет формироваться контекст экшена. Это соответствует
+         * интерфейсу IRequest.
+         */
+        this.engine.addHook('onRequest', (req, _res, done) => {
+            const actualReq: IRequest = req;
+            actualReq.locals = {};
+            done();
+        });
     }
 
     public start() {
@@ -19,15 +31,26 @@ export class FastifyServer {
         });
     }
 
-    public addPreHandler() {}
+    public setPreHandlers(arr: HandlerConstructor[]) {
+        arr.forEach((handlerClass: HandlerConstructor) => {
+            const inst = new handlerClass(this.g);
 
-    public addControllers(arr: Array<any>) {
+            /**
+             * Сигнатура preHandlerHookHandler (параметр this) явно указывает,
+             * что хендлер должен вызываться в контексте инстанса сервера
+             * (иначе функция хендлера просто не получит доступ к объектам
+             * Response, Reply и т.д.)
+             */
+            this.preHandlers.push(inst.getHandler().bind(this.engine));
+        });
+    }
+
+    public setControllers(arr: Array<any>) {
         arr.forEach((controller) => {
             const routes = controller.routes;
 
-            // TODO any
             routes.forEach((router: any) => {
-                this.addRoute({
+                this.setRoute({
                     method: router.method,
                     url: router.url,
                     preHandler: this.preHandlers,
@@ -37,7 +60,7 @@ export class FastifyServer {
         });
     }
 
-    private addRoute(obj: RouteOptions) {
+    private setRoute(obj: RouteOptions) {
         this.engine.route(obj);
     }
 
