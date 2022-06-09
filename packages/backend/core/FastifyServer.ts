@@ -1,6 +1,7 @@
 import fastify, { FastifyInstance, RouteOptions, preHandlerHookHandler } from 'fastify';
-import { GlobalContext, IRequest } from './types/utils';
+import { GlobalContext, IRequest, IRoute } from './types/utils';
 import { HandlerConstructor } from './BaseHandler';
+import { ControllerConstructor } from './BaseController';
 
 export class FastifyServer {
     private engine: FastifyInstance;
@@ -46,11 +47,11 @@ export class FastifyServer {
         });
     }
 
-    public setControllers(arr: Array<any>) {
-        arr.forEach((controller) => {
-            const routes = controller.routes;
+    public setControllers(arr: ControllerConstructor[]) {
+        arr.forEach((controllerClass) => {
+            const inst = new controllerClass(this.g);
 
-            routes.forEach((router: any) => {
+            inst.routes.forEach((router: IRoute) => {
                 this.setRoute({
                     method: router.method,
                     url: router.url,

@@ -19,6 +19,29 @@ export abstract class BaseController {
         this.g = args[0];
     }
 
+    private parseMethod(actionClass: ActionConstructor): HttpMethods | null {
+        const className = actionClass.name;
+
+        switch (true) {
+            case /GET/.test(className):
+                return 'GET';
+            case /POST/.test(className):
+                return 'POST';
+            case /PUT/.test(className):
+                return 'PUT';
+            case /DELETE/.test(className):
+                return 'DELETE';
+            case /HEAD/.test(className):
+                return 'HEAD';
+            case /PATCH/.test(className):
+                return 'PATCH';
+            case /OPTIONS/.test(className):
+                return 'OPTIONS';
+            default:
+                return null;
+        }
+    }
+
     protected setUrls(uriClass: UriConstructor) {
         const inst = new uriClass(this.g);
         this._urls = inst;
@@ -31,13 +54,20 @@ export abstract class BaseController {
     /**
      * Идея данного API в том, что каждому ресурсу (uri) может
      * соответствовать один или несколько экшенов, которые привязываются
-     * к HTTP-методу
+     * к HTTP-методу. При этом http-метод указывается в названии
+     * экшен-класса (например, IndexGET)
      */
-    setRoute(uri: string, arr: ActionConstructor[]) {
-        arr.forEach((actionClass: ActionConstructor) => {
+    protected setRoute(uri: string, actions: ActionConstructor[]) {
+        actions.forEach((actionClass: ActionConstructor) => {
+            const method = this.parseMethod(actionClass);
+
+            if (!method) {
+                throw Error(`AppError: Action class have a wrong name. 
+                It should contain uppercase method name (like IndesGET)`);
+            }
+
             const routeDeclaration: IRoute = {
-                //! TODO calculate method from action class name
-                method: 'GET',
+                method,
                 url: uri,
                 handler: this.actionRunner(actionClass),
             };
@@ -76,7 +106,7 @@ export abstract class BaseController {
                         return res.send(await rs.htmlPromise);
                     }
                     default:
-                        throw new Error('AppError: Unhandler response');
+                        throw Error('AppError: Unhandler response');
                 }
             } catch (err) {
                 // TODO ActionError

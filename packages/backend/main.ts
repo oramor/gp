@@ -1,9 +1,14 @@
 import { FastifyServer } from './core/FastifyServer';
 import { GlobalContext, Config } from './core/types/utils';
 
+// Servoses
 import { TemplateService } from './services/templater/TemplateService';
 
+// Handlers
 import { LangHandler } from './handlers/LangHandler';
+
+// Controllers
+import { SiteController } from './modules/site/SiteController';
 
 const config: Config = {
     port: 3000,
@@ -25,6 +30,7 @@ GlobalContextConstructor()
         const server = new FastifyServer(g);
 
         server.setPreHandlers([LangHandler]);
+        server.setControllers([SiteController]);
         server.start();
 
         process
