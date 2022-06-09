@@ -1,14 +1,59 @@
-import { FastifyReply } from 'fastify';
-import { GlobalContext, ActionContext, IRequest } from './types/utils';
+import {
+    GlobalContext,
+    ActionContext,
+    IRequest,
+    IResponse,
+    HandlerFunc,
+    IRoute,
+} from './types/utils';
 import { ActionResult, DataResult, PageResult, BaseAction, ActionConstructor } from './BaseAction';
+import { BaseUri, UriConstructor } from './BaseUri';
+
+export type ControllerConstructor = new (g: GlobalContext) => BaseController;
 
 export abstract class BaseController {
-    constructor(public g: GlobalContext) {}
+    protected g: GlobalContext;
+    private _urls: BaseUri;
+    public routes: IRoute[];
+    constructor(...args: ConstructorParameters<ControllerConstructor>) {
+        this.g = args[0];
+    }
 
-    // TODO типизировать хендлер, который возвращает эшкн раннер. Будет та же сигнатура, что и для Handlers
-    actionRunner(actionClass: ActionConstructor) {
-        // На момент обработки экшена объект заспроса уже будет расширен до IRequest (см Server)
-        return async (req: IRequest, res: FastifyReply): Promise<FastifyReply | void> => {
+    protected setUrls(uriClass: UriConstructor) {
+        const inst = new uriClass(this.g);
+        this._urls = inst;
+    }
+
+    protected get urls() {
+        return this._urls;
+    }
+
+    /**
+     * Идея данного API в том, что каждому ресурсу (uri) может
+     * соответствовать один или несколько экшенов, которые привязываются
+     * к HTTP-методу
+     */
+    setRoute(uri: string, arr: ActionConstructor[]) {
+        arr.forEach((actionClass: ActionConstructor) => {
+            const routeDeclaration: IRoute = {
+                //! TODO calculate method from action class name
+                method: 'GET',
+                url: uri,
+                handler: this.actionRunner(actionClass),
+            };
+
+            this.routes.push(routeDeclaration);
+        });
+    }
+
+    /**
+     * Данный метод возвращает функцию, которая регистрируется в качестве
+     * финального обработчика запроса. По сути, этот метод предоставляет
+     * замыкание на глобальный контекст.
+     */
+    actionRunner(actionClass: ActionConstructor): HandlerFunc {
+        // На момент обработки экшена объект запроса уже будет расширен до IRequest (см Server)
+        return async (req: IRequest, res: IResponse): Promise<IResponse | void> => {
             const ctx: ActionContext = {
                 // TODO add logger warning
                 lang: req?.locals?.lang ? req.locals.lang : this.g.config.defaultLang,
