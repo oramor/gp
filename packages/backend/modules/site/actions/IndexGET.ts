@@ -1,11 +1,10 @@
-import { BaseAction } from '../../../core/BaseAction';
-import { ActionContext, GlobalContext } from '../../../core/types/utils';
+import { BaseAction, ActionConstructor } from '../../../core/BaseAction';
 
 export class IndexGET extends BaseAction {
-    constructor(g: GlobalContext, ctx: ActionContext) {
-        super(g, ctx);
+    constructor(...args: ConstructorParameters<ActionConstructor>) {
+        super(...args);
     }
     async run() {
-        return this.data({ name: 'ggg' });
+        return this.data({ name: 'hello' });
     }
 }

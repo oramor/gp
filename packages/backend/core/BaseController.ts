@@ -7,13 +7,13 @@ import {
     IRoute,
 } from './types/utils';
 import { ActionResult, DataResult, PageResult, BaseAction, ActionConstructor } from './BaseAction';
-import { BaseUri, UriConstructor } from './BaseUri';
+import { BaseUri } from './BaseUri';
 
-export type ControllerConstructor = new (g: GlobalContext) => BaseController;
+export type ControllerConstructor = new (g: GlobalContext) => BaseController<BaseUri>;
 
-export abstract class BaseController {
+export abstract class BaseController<T extends BaseUri> {
+    abstract urls: T;
     protected g: GlobalContext;
-    private _urls: BaseUri;
     public routes: IRoute[];
     constructor(...args: ConstructorParameters<ControllerConstructor>) {
         this.g = args[0];
@@ -40,15 +40,6 @@ export abstract class BaseController {
             default:
                 return null;
         }
-    }
-
-    protected setUrls(uriClass: UriConstructor) {
-        const inst = new uriClass(this.g);
-        this._urls = inst;
-    }
-
-    protected get urls() {
-        return this._urls;
     }
 
     /**

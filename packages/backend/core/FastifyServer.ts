@@ -27,6 +27,10 @@ export class FastifyServer {
         });
     }
 
+    private setRoute(obj: RouteOptions) {
+        this.engine.route(obj);
+    }
+
     public start() {
         this.engine.listen({ port: this.g.config.port }, (err) => {
             if (err) throw err;
@@ -60,10 +64,6 @@ export class FastifyServer {
                 });
             });
         });
-    }
-
-    private setRoute(obj: RouteOptions) {
-        this.engine.route(obj);
     }
 
     public async shutdown(code: ShutdownCode) {

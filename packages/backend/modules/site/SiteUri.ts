@@ -5,7 +5,11 @@ export class SiteUri extends BaseUri {
         super(...args);
     }
 
-    get index() {
+    public get index() {
         return '/';
+    }
+
+    public get favicon() {
+        return '/favicon.ico';
     }
 }
