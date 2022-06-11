@@ -8,7 +8,7 @@ export class SiteController extends BaseController<SiteUri> {
     constructor(...args: ConstructorParameters<ControllerConstructor>) {
         super(...args);
         this.urls = new SiteUri(this.g);
-        this.setRoute(this.urls.index, [IndexGET]);
         this.setRoute(this.urls.favicon, [FaviconGET]);
+        this.setRoute(this.urls.index, [IndexGET]);
     }
 }

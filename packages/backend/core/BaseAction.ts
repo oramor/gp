@@ -16,7 +16,7 @@ export interface PageResult {
     htmlPromise: Promise<string>;
 }
 
-export type ActionResult<T> = AbstractActionResult & T;
+export type ActionResult<T extends DataResult | PageResult> = AbstractActionResult & T;
 
 export type ActionConstructor = new (g: GlobalContext, ctx: ActionContext) => BaseAction;
 
@@ -41,7 +41,7 @@ export abstract class BaseAction {
         return {
             resultCode: 'render',
             httpStatus: pageServInst.httpStatus,
-            htmlPromise: pageServInst.render(),
+            htmlPromise: pageServInst.render() || '{}',
         };
     }
 }

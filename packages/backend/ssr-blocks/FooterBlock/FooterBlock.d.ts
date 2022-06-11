@@ -1,4 +1,4 @@
-export interface IFooterBlock extends ObjectPlaceholders {
+export interface IFooterBlock extends PlaceholdersObject {
     static: {
         currentYear: string;
     };

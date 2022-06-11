@@ -27,7 +27,7 @@ export abstract class BasePageServ {
 
     constructor(
         private g: GlobalContext,
-        private ctx: ActionContext,
+        //private ctx: ActionContext,
         private props?: PlaceholdersNode,
     ) {
         this.templatesDirAbsolutePath = this.g.config.templateDir;
@@ -36,21 +36,29 @@ export abstract class BasePageServ {
         this.staticPlaceholders = {};
     }
 
-    public render(): Promise<string> {
-        return this.templateService.render(this.templatePath, this.placeholders);
+    public async render(): Promise<string | void> {
+        try {
+            const result = await this.templateService.render(this.templatePath, this.placeholders);
+            return result;
+        } catch (err) {
+            // TODO forward to err500?
+            throw new Error('ServiceError');
+            //console.log(err.message);
+        }
     }
 
     public setPlaceholder(name: string, value: PlaceholderValue): void {
         this.propsPlaceholders[name] = value;
     }
 
-    private checkRootName(name: string): void {
-        const reservedNames = ['user', 'static', 'page', 'props'];
+    // TODO remove?
+    // private checkRootName(name: string): void {
+    //     const reservedNames = ['user', 'static', 'page', 'props'];
 
-        if (reservedNames.includes(name)) {
-            throw new Error(`Root name [ ${name} ] is reserved`);
-        }
-    }
+    //     if (reservedNames.includes(name)) {
+    //         throw new Error(`Root name [ ${name} ] is reserved`);
+    //     }
+    // }
 
     /**
      * Объект плейсхолдеров (ObjectPlaceholders)
@@ -61,7 +69,7 @@ export abstract class BasePageServ {
      * А в случае с BlockName.dict.sendButtonName уже в словаре
      * подключенного к странице компонента BlockName.
      */
-    private get placeholders(): ObjectPlaceholders {
+    private get placeholders(): PlaceholdersObject {
         return {
             static: this.staticPlaceholders,
             props: this.propsPlaceholders,

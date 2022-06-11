@@ -19,14 +19,14 @@ type PlaceholderValue = Primitives | Record<string, Primitives>;
 // ObjectPlaceholders contains root-nodes which extends only from this
 type PlaceholdersNode = Record<string, PlaceholderValue>;
 
-type ObjectPlaceholders = {
+type PlaceholdersObject = {
     static?: PlaceholdersNode;
     props?: PlaceholdersNode;
 };
 
 type PlaceholdersFrom<
-    T extends ObjectPlaceholders = any,
-    K extends keyof ObjectPlaceholders = any,
+    T extends PlaceholdersObject = any,
+    K extends keyof PlaceholdersObject = any,
 > = T[K];
 
 type SupportedLangs = 'ru' | 'en';
