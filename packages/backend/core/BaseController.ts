@@ -8,6 +8,8 @@ import {
 } from './types/utils';
 import { ActionResult, DataResult, PageResult, BaseAction, ActionConstructor } from './BaseAction';
 import { BaseUri } from './BaseUri';
+import { ServiceError } from './ServiceError';
+import { BaseExeption } from './BaseExeption';
 
 export type ControllerConstructor = new (g: GlobalContext) => BaseController<BaseUri>;
 
@@ -78,6 +80,8 @@ export abstract class BaseController<T extends BaseUri> {
             const ctx: ActionContext = {
                 // TODO add logger warning
                 lang: req?.locals?.lang ? req.locals.lang : this.g.config.defaultLang,
+                req,
+                res,
             };
 
             try {
@@ -99,9 +103,16 @@ export abstract class BaseController<T extends BaseUri> {
                     default:
                         throw Error('AppError: Unhandler response');
                 }
-            } catch (err) {
-                // TODO ActionError
-                console.log(err.message);
+            } catch (exep) {
+                if (exep instanceof BaseExeption) {
+                    console.log('BaseExeption');
+                }
+
+                if (exep instanceof ServiceError) {
+                    console.log('Service error');
+                }
+
+                Error('Unknown error');
             }
         };
     }

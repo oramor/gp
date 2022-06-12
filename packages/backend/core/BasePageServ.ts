@@ -36,7 +36,7 @@ export abstract class BasePageServ {
         this.staticPlaceholders = {};
     }
 
-    public async render(): Promise<string | void> {
+    public async render(): Promise<string> {
         try {
             const result = await this.templateService.render(this.templatePath, this.placeholders);
             return result;

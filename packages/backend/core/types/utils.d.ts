@@ -18,6 +18,8 @@ export type LocalContext = {
 
 export type ActionContext = {
     lang: SupportedLangs;
+    req: FastifyRequest;
+    res: FastifyReply;
 };
 
 export type Config = Readonly<{

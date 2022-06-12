@@ -41,7 +41,7 @@ export abstract class BaseAction {
         return {
             resultCode: 'render',
             httpStatus: pageServInst.httpStatus,
-            htmlPromise: pageServInst.render() || '{}',
+            htmlPromise: pageServInst.render(),
         };
     }
 }

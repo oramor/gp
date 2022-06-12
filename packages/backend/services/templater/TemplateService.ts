@@ -1,8 +1,9 @@
 import Handlebars from 'handlebars';
 import { readFile, access } from 'node:fs/promises';
+import { ServiceError } from '../../core/ServiceError';
 
 export class TemplateService {
-    public async render(path: string, obj: PlaceholdersObject): Promise<string | void> {
+    public async render(path: string, obj: PlaceholdersObject): Promise<string> {
         try {
             // Node access checker
             await access(path);
@@ -15,8 +16,7 @@ export class TemplateService {
 
             return compilier(obj);
         } catch (err) {
-            // TODO Error handle
-            console.log(err.message);
+            throw ServiceError;
         }
     }
 }
