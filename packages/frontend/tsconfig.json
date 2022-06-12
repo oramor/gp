@@ -1,5 +1,7 @@
 {
     "compilerOptions": {
+        "rootDir": ".",
+        "outDir": "_dist",
         "composite": true,
         "declaration": true,
         "declarationMap": true
@@ -10,13 +12,7 @@
         }
     ],
     "include": [
-        "**/*.ts",
-        "**/*.tsx",
-        "blocks/FooterBlock/FooterBlock.tsx",
-        "../backend/ssr-blocks/FooterBlock/FooterBlockServ.ts",
-        "../backend/ssr-blocks/FooterBlock/FooterBlock.d.ts",
-        "../backend/ssr-blocks/FooterBlock/FooterBlockDict.ts",
-        "../backend/ssr-pages/MainPageServ.ts"
+        "**/*"
     ],
     "exclude": [
         "_dist",

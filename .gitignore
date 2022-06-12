@@ -1,2 +1,5 @@
 node_modules/
+packages/backend/_dist/
+packages/frontend/_dist/
+packages/frontend/_pub/
 package-lock.json

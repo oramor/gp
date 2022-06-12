@@ -4,8 +4,9 @@
     "description": "",
     "type": "module",
     "scripts": {
-        "build back": "tsc --build packages/backend",
-        "build": "tsc --build packages/backend && tsc --build packages/frontend"
+        "bf": "tsc --build packages/frontend",
+        "bb": "tsc --build packages/backend",
+        "b": "tsc --build packages/backend && tsc --build packages/frontend"
     },
     "repository": {
         "type": "git",
