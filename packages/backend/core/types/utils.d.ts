@@ -17,6 +17,7 @@ export type LocalContext = {
 };
 
 export type ActionContext = {
+    method: HttpMethods;
     lang: SupportedLangs;
     req: FastifyRequest;
     res: FastifyReply;
@@ -28,6 +29,13 @@ export type Config = Readonly<{
     baseUrl: string;
     templateDir: string;
     defaultLang: SupportedLangs;
+    defaults?: {
+        services?: {
+            templateService?: {
+                name: string;
+            };
+        };
+    };
 }>;
 
 export interface IRequest extends FastifyRequest {
@@ -50,5 +58,8 @@ export interface IRoute extends RouteOptions {}
  * но действия с его значением запрещены (тип unknown). В моей реализации
  * всегда асинхронна, формируется в контроллере и содержит экшн, в котором
  * выполняется вся бизнес-логика
+ *
+ * Видимо, внутри данной функции всегда должен вызываться метод send()
+ * для завершения обработки запроса
  */
 export type HandlerFunc = RouteHandler;

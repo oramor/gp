@@ -8,8 +8,9 @@ import {
 } from './types/utils';
 import { ActionResult, DataResult, PageResult, BaseAction, ActionConstructor } from './BaseAction';
 import { BaseUri } from './BaseUri';
-import { ServiceError } from './ServiceError';
+import { ActionError } from './errors/ActionError';
 import { BaseExeption } from './BaseExeption';
+import { HttpError } from './errors/HttpError';
 
 export type ControllerConstructor = new (g: GlobalContext) => BaseController<BaseUri>;
 
@@ -21,23 +22,23 @@ export abstract class BaseController<T extends BaseUri> {
         this.g = args[0];
     }
 
-    private parseMethod(actionClass: ActionConstructor): HttpMethods | null {
-        const className = actionClass.name;
+    private parseMethod(str: string | undefined): HttpMethods | null {
+        if (!str) return null;
 
         switch (true) {
-            case /GET/.test(className):
+            case /GET/.test(str):
                 return 'GET';
-            case /POST/.test(className):
+            case /POST/.test(str):
                 return 'POST';
-            case /PUT/.test(className):
+            case /PUT/.test(str):
                 return 'PUT';
-            case /DELETE/.test(className):
+            case /DELETE/.test(str):
                 return 'DELETE';
-            case /HEAD/.test(className):
+            case /HEAD/.test(str):
                 return 'HEAD';
-            case /PATCH/.test(className):
+            case /PATCH/.test(str):
                 return 'PATCH';
-            case /OPTIONS/.test(className):
+            case /OPTIONS/.test(str):
                 return 'OPTIONS';
             default:
                 return null;
@@ -52,7 +53,7 @@ export abstract class BaseController<T extends BaseUri> {
      */
     protected setRoute(uri: string, actions: ActionConstructor[]) {
         actions.forEach((actionClass: ActionConstructor) => {
-            const method = this.parseMethod(actionClass);
+            const method = this.parseMethod(actionClass.name);
 
             if (!method) {
                 throw Error(`AppError: Action class have a wrong name. 
@@ -77,7 +78,13 @@ export abstract class BaseController<T extends BaseUri> {
     actionRunner(actionClass: ActionConstructor): HandlerFunc {
         // На момент обработки экшена объект запроса уже будет расширен до IRequest (см Server)
         return async (req: IRequest, res: IResponse): Promise<IResponse | void> => {
+            const method = this.parseMethod(req.raw.method);
+            if (!method) {
+                throw new HttpError(res, 400, 'Not found mehod in the request headers');
+            }
+
             const ctx: ActionContext = {
+                method,
                 // TODO add logger warning
                 lang: req?.locals?.lang ? req.locals.lang : this.g.config.defaultLang,
                 req,
@@ -101,18 +108,30 @@ export abstract class BaseController<T extends BaseUri> {
                         return res.send(await rs.htmlPromise);
                     }
                     default:
-                        throw Error('AppError: Unhandler response');
+                        throw Error(`Unhandled action method [ ${result.resultCode} ]`);
                 }
             } catch (exep) {
                 if (exep instanceof BaseExeption) {
-                    console.log('BaseExeption');
+                    return exep.handle();
                 }
 
-                if (exep instanceof ServiceError) {
-                    console.log('Service error');
+                if (exep instanceof ActionError) {
+                    return exep.handle();
                 }
 
-                Error('Unknown error');
+                if (exep instanceof HttpError) {
+                    return exep.handle();
+                }
+
+                // To put in a standard handler https://www.fastify.io/docs/latest/Reference/Server/#seterrorhandler
+                if (exep instanceof Error) {
+                    exep.message = exep.message
+                        ? `Unhandled error: ${exep.message}`
+                        : 'Unhandled error';
+                    throw exep;
+                }
+
+                throw Error('Unknown exeption');
             }
         };
     }

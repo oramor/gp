@@ -3,6 +3,7 @@ import { GlobalContext, ActionContext } from './types/utils';
 export type ExceptionConstructor = new (g: GlobalContext, ctx: ActionContext) => BaseExeption;
 
 export abstract class BaseExeption {
+    abstract handle(): void;
     protected g: GlobalContext;
     protected ctx: ActionContext;
     constructor(...args: ConstructorParameters<ExceptionConstructor>) {

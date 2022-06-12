@@ -1,4 +1,5 @@
 import { ActionContext, GlobalContext } from './types/utils';
+import { ActionError } from './errors/ActionError';
 
 export type PageServConstructor = new (
     g: GlobalContext,
@@ -9,7 +10,13 @@ export type PageServConstructor = new (
 export abstract class BasePageServ {
     abstract httpStatus: HttpStatus;
     abstract dictionary: DictionaryObject;
+    protected g: GlobalContext;
+    protected ctx: ActionContext;
+    protected props?: PlaceholdersNode;
     protected templatesDirAbsolutePath: string;
+
+    //TODO this is an external dependency for core. Mayby implement BaseServer.setTemplateService?
+    // or do this as a config required?
     private templateService;
 
     /**
@@ -25,15 +32,16 @@ export abstract class BasePageServ {
      */
     private staticPlaceholders: PlaceholdersNode;
 
-    constructor(
-        private g: GlobalContext,
-        //private ctx: ActionContext,
-        private props?: PlaceholdersNode,
-    ) {
+    constructor(...args: ConstructorParameters<PageServConstructor>) {
+        this.g = args[0];
+        this.ctx = args[1];
+
+        // Placeholdes root nodes
+        this.propsPlaceholders = args[2] ?? {};
+        this.staticPlaceholders = {};
+
         this.templatesDirAbsolutePath = this.g.config.templateDir;
         this.templateService = this.g.templater;
-        this.propsPlaceholders = this.props ?? {};
-        this.staticPlaceholders = {};
     }
 
     public async render(): Promise<string> {
@@ -41,24 +49,13 @@ export abstract class BasePageServ {
             const result = await this.templateService.render(this.templatePath, this.placeholders);
             return result;
         } catch (err) {
-            // TODO forward to err500?
-            throw new Error('ServiceError');
-            //console.log(err.message);
+            throw new ActionError(this.ctx, 'Template service error');
         }
     }
 
     public setPlaceholder(name: string, value: PlaceholderValue): void {
         this.propsPlaceholders[name] = value;
     }
-
-    // TODO remove?
-    // private checkRootName(name: string): void {
-    //     const reservedNames = ['user', 'static', 'page', 'props'];
-
-    //     if (reservedNames.includes(name)) {
-    //         throw new Error(`Root name [ ${name} ] is reserved`);
-    //     }
-    // }
 
     /**
      * Объект плейсхолдеров (ObjectPlaceholders)
