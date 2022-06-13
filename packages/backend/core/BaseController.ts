@@ -17,7 +17,7 @@ export type ControllerConstructor = new (g: GlobalContext) => BaseController<Bas
 export abstract class BaseController<T extends BaseUri> {
     abstract urls: T;
     protected g: GlobalContext;
-    public routes: IRoute[];
+    public routes: IRoute[] = [];
     constructor(...args: ConstructorParameters<ControllerConstructor>) {
         this.g = args[0];
     }

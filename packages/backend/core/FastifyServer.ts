@@ -1,11 +1,13 @@
-import fastify, { FastifyInstance, RouteOptions, preHandlerHookHandler } from 'fastify';
+//import fastify, { FastifyInstance, RouteOptions, preHandlerHookHandler } from 'fastify';
+import * as Fastify from 'fastify';
+import { fastify } from 'fastify';
 import { GlobalContext, IRequest, IRoute } from './types/utils';
 import { HandlerConstructor } from './BaseHandler';
 import { ControllerConstructor } from './BaseController';
 
 export class FastifyServer {
-    private engine: FastifyInstance;
-    private preHandlers: preHandlerHookHandler[];
+    private engine: Fastify.FastifyInstance;
+    private preHandlers: Fastify.preHandlerHookHandler[];
 
     constructor(private g: GlobalContext) {
         this.engine = fastify({
@@ -27,7 +29,7 @@ export class FastifyServer {
         });
     }
 
-    private setRoute(obj: RouteOptions) {
+    private setRoute(obj: Fastify.RouteOptions) {
         this.engine.route(obj);
     }
 

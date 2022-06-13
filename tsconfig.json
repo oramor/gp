@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "strict": true,
         "rootDir": ".",
         "noUnusedLocals": true,
         "noUnusedParameters": true,
@@ -10,10 +11,10 @@
         "noImplicitAny": true,
         "noImplicitOverride": false,
         "noImplicitReturns": true,
-        "strict": true,
-        "useUnknownInCatchVariables": true,
         "noImplicitThis": true,
+        "useUnknownInCatchVariables": true,
         "noPropertyAccessFromIndexSignature": true,
+        "strictPropertyInitialization": true
     },
     "references": [
         {

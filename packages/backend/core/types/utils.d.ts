@@ -50,8 +50,7 @@ export type HandlerDoneFunc = HookHandlerDoneFunction;
  * Интерфейс роута, который регистрируется в Fastify (см Server).
  * Обязательно содержит метод запроса, ссылку и обработчик
  */
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IRoute extends RouteOptions {}
+export type IRoute = RouteOptions;
 
 /**
  * Функция, которая отвечает за обработку запроса. Может возвращать промис,
