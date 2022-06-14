@@ -1,13 +1,15 @@
-//import fastify, { FastifyInstance, RouteOptions, preHandlerHookHandler } from 'fastify';
 import * as Fastify from 'fastify';
 import { fastify } from 'fastify';
-import { GlobalContext, IRequest, IRoute } from './types/utils';
+import { GlobalContext, IRequest } from './types/utils';
 import { HandlerConstructor } from './BaseHandler';
 import { ControllerConstructor } from './BaseController';
+import { FastifyHandlers, FastifyObjects } from './types/libs/fastify';
+import { LangHandler } from './defaults/handlers/LangHandler';
+import { NotFoundHandler } from './defaults/handlers/NotFoundHandler';
 
 export class FastifyServer {
     private engine: Fastify.FastifyInstance;
-    private preHandlers: Fastify.preHandlerHookHandler[];
+    private preHandlers: FastifyHandlers.PreHandler[];
 
     constructor(private g: GlobalContext) {
         this.engine = fastify({
@@ -27,6 +29,18 @@ export class FastifyServer {
             actualReq.locals = {};
             done();
         });
+
+        /**
+         * TODO Здесь жестко прописаны обработчики ошибки не найденного роута
+         * Причем приходится добавлять сюда такой же прехендлер для определения
+         * языка, который добавлять в роуты.
+         */
+        this.engine.setNotFoundHandler(
+            {
+                preHandler: new LangHandler(this.g).handler,
+            },
+            new NotFoundHandler(this.g).handler,
+        );
     }
 
     private setRoute(obj: Fastify.RouteOptions) {
@@ -49,7 +63,7 @@ export class FastifyServer {
              * (иначе функция хендлера просто не получит доступ к объектам
              * Response, Reply и т.д.)
              */
-            this.preHandlers.push(inst.getHandler().bind(this.engine));
+            this.preHandlers.push(inst.handler.bind(this.engine));
         });
     }
 
@@ -57,7 +71,7 @@ export class FastifyServer {
         arr.forEach((controllerClass) => {
             const inst = new controllerClass(this.g);
 
-            inst.routes.forEach((router: IRoute) => {
+            inst.routes.forEach((router: FastifyObjects.IRouteOptions) => {
                 this.setRoute({
                     method: router.method,
                     url: router.url,
