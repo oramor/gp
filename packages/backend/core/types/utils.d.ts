@@ -1,26 +1,20 @@
-import {
-    FastifyRequest,
-    FastifyReply,
-    HookHandlerDoneFunction,
-    RouteOptions,
-    RouteHandler,
-} from 'fastify';
 import { TemplateService } from '../../services/templater/TemplateService';
+import { FastifyObjects } from './libs/fastify';
 
 export type GlobalContext = Readonly<{
     config: Config;
     templater: TemplateService;
 }>;
 
-export type LocalContext = {
+export type LocalsObject = {
     lang?: SupportedLangs;
 };
 
 export type ActionContext = {
     method: HttpMethods;
     lang: SupportedLangs;
-    req: FastifyRequest;
-    res: FastifyReply;
+    req: FastifyObjects.IReq;
+    res: FastifyObjects.IRes;
 };
 
 export type Config = Readonly<{
@@ -38,27 +32,11 @@ export type Config = Readonly<{
     };
 }>;
 
-export interface IRequest extends FastifyRequest {
-    locals?: LocalContext;
+/**
+ * У Fastify нет предустановленного поля в объекте запроса,
+ * через который можно транспортировать данные. Поэтому данное поле
+ * расширяется хуком onRequest при созании инстанса сервера.
+ */
+export interface IRequest extends FastifyObjects.IReq {
+    locals?: LocalsObject;
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface IResponse extends FastifyReply {}
-
-export type HandlerDoneFunc = HookHandlerDoneFunction;
-
-/**
- * Интерфейс роута, который регистрируется в Fastify (см Server).
- * Обязательно содержит метод запроса, ссылку и обработчик
- */
-export type IRoute = RouteOptions;
-
-/**
- * Функция, которая отвечает за обработку запроса. Может возвращать промис,
- * но действия с его значением запрещены (тип unknown). В моей реализации
- * всегда асинхронна, формируется в контроллере и содержит экшн, в котором
- * выполняется вся бизнес-логика
- *
- * Видимо, внутри данной функции всегда должен вызываться метод send()
- * для завершения обработки запроса
- */
-export type HandlerFunc = RouteHandler;

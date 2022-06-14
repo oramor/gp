@@ -5,7 +5,7 @@ import { GlobalContext, Config } from './core/types/utils';
 import { TemplateService } from './services/templater/TemplateService';
 
 // Handlers
-import { LangHandler } from './handlers/LangHandler';
+import { LangHandler } from './core/defaults/handlers/LangHandler';
 
 // Controllers
 import { SiteController } from './modules/site/SiteController';
@@ -18,14 +18,14 @@ const config: Config = {
     defaultLang: 'ru',
 };
 
-async function GlobalContextConstructor(): Promise<GlobalContext> {
+async function globalContextFabric(): Promise<GlobalContext> {
     return {
         templater: new TemplateService(),
         config,
     };
 }
 
-GlobalContextConstructor()
+globalContextFabric()
     .then((g) => {
         const server = new FastifyServer(g);
 

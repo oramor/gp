@@ -1,17 +1,10 @@
-import { GlobalContext, IRequest, IResponse, HandlerDoneFunc } from './types/utils';
-import { FastifyInstance } from 'fastify';
+import { GlobalContext } from './types/utils';
+import { FastifyHandlers } from './types/libs/fastify';
 
 export type HandlerConstructor = new (g: GlobalContext) => BaseHandler;
 
-export type PreHandler = (
-    this: FastifyInstance,
-    req: IRequest,
-    res: IResponse,
-    done: HandlerDoneFunc,
-) => void;
-
-export abstract class BaseHandler<T = PreHandler> {
-    abstract getHandler(): T;
+export abstract class BaseHandler<T = FastifyHandlers.PreHandler | FastifyHandlers.RouteHandler> {
+    abstract get handler(): T;
     g: GlobalContext;
     constructor(...args: ConstructorParameters<HandlerConstructor>) {
         this.g = args[0];

@@ -1,23 +1,17 @@
-import {
-    GlobalContext,
-    ActionContext,
-    IRequest,
-    IResponse,
-    HandlerFunc,
-    IRoute,
-} from './types/utils';
+import { GlobalContext, ActionContext, IRequest } from './types/utils';
 import { ActionResult, DataResult, PageResult, BaseAction, ActionConstructor } from './BaseAction';
 import { BaseUri } from './BaseUri';
 import { ActionError } from './errors/ActionError';
 import { BaseExeption } from './BaseExeption';
 import { HttpError } from './errors/HttpError';
+import { FastifyHandlers, FastifyObjects } from './types/libs/fastify';
 
 export type ControllerConstructor = new (g: GlobalContext) => BaseController<BaseUri>;
 
 export abstract class BaseController<T extends BaseUri> {
     abstract urls: T;
     protected g: GlobalContext;
-    public routes: IRoute[] = [];
+    public routes: FastifyObjects.IRouteOptions[] = [];
     constructor(...args: ConstructorParameters<ControllerConstructor>) {
         this.g = args[0];
     }
@@ -60,7 +54,7 @@ export abstract class BaseController<T extends BaseUri> {
                 It should contain uppercase method name (like IndesGET)`);
             }
 
-            const routeDeclaration: IRoute = {
+            const routeDeclaration: FastifyObjects.IRouteOptions = {
                 method,
                 url: uri,
                 handler: this.actionRunner(actionClass),
@@ -75,9 +69,13 @@ export abstract class BaseController<T extends BaseUri> {
      * финального обработчика запроса. По сути, этот метод предоставляет
      * замыкание на глобальный контекст.
      */
-    actionRunner(actionClass: ActionConstructor): HandlerFunc {
+    // TODO getActionHandler() => ResponseHandlerFunction (вместо HandlerFunc)
+    actionRunner(actionClass: ActionConstructor): FastifyHandlers.RouteHandler {
         // На момент обработки экшена объект запроса уже будет расширен до IRequest (см Server)
-        return async (req: IRequest, res: IResponse): Promise<IResponse | void> => {
+        return async (
+            req: IRequest,
+            res: FastifyObjects.IRes,
+        ): Promise<FastifyObjects.IRes | void> => {
             const method = this.parseMethod(req.raw.method);
             if (!method) {
                 throw new HttpError(res, 400, 'Not found mehod in the request headers');
