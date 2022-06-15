@@ -9,6 +9,10 @@ export class TemplateService {
         // If encoding param passed, readFile returns Buffer
         const template: string = await readFile(path, { encoding: 'utf-8' });
 
+        /**
+         * Метод compilier возвращает функцию, настроенную при помощи
+         * не обязательного объекта параметро options.
+         */
         const compilier: Handlebars.TemplateDelegate<PlaceholdersObject> =
             Handlebars.compile(template);
 

@@ -11,6 +11,7 @@ export type ControllerConstructor = new (g: GlobalContext) => BaseController<Bas
 export abstract class BaseController<T extends BaseUri> {
     abstract urls: T;
     protected g: GlobalContext;
+    //TODO Реализовать возврат 405 ошибки для не поддерживающихся методов ресурса
     public routes: FastifyObjects.IRouteOptions[] = [];
     constructor(...args: ConstructorParameters<ControllerConstructor>) {
         this.g = args[0];
@@ -54,23 +55,22 @@ export abstract class BaseController<T extends BaseUri> {
                 It should contain uppercase method name (like IndesGET)`);
             }
 
-            const routeDeclaration: FastifyObjects.IRouteOptions = {
+            const routeOptions: FastifyObjects.IRouteOptions = {
                 method,
                 url: uri,
-                handler: this.actionRunner(actionClass),
+                handler: this.getRouteHandler(actionClass),
             };
 
-            this.routes.push(routeDeclaration);
+            this.routes.push(routeOptions);
         });
     }
 
     /**
-     * Данный метод возвращает функцию, которая регистрируется в качестве
+     * Метод возвращает функцию, которая регистрируется в качестве
      * финального обработчика запроса. По сути, этот метод предоставляет
      * замыкание на глобальный контекст.
      */
-    // TODO getActionHandler() => ResponseHandlerFunction (вместо HandlerFunc)
-    actionRunner(actionClass: ActionConstructor): FastifyHandlers.RouteHandler {
+    getRouteHandler(actionClass: ActionConstructor): FastifyHandlers.RouteHandler {
         // На момент обработки экшена объект запроса уже будет расширен до IRequest (см Server)
         return async (
             req: IRequest,
@@ -83,7 +83,6 @@ export abstract class BaseController<T extends BaseUri> {
 
             const ctx: ActionContext = {
                 method,
-                // TODO add logger warning
                 lang: req?.locals?.lang ? req.locals.lang : this.g.config.defaultLang,
                 req,
                 res,

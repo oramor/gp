@@ -22,6 +22,16 @@ export namespace FastifyHandlers {
      * обработки запроса. Аналог экспрессовского next()
      */
     export type HandlerDone = Fastify.HookHandlerDoneFunction;
+
+    /**
+     * Финальный обработчик ошибок (см. setErrorHandler в instance.d.ts)
+     */
+    export type HandlerError = (
+        this: Fastify.FastifyInstance,
+        err: Error,
+        req: FastifyObjects.IReq,
+        res: FastifyObjects.IRes,
+    ) => Fastify.FastifyInstance;
 }
 
 export namespace FastifyObjects {

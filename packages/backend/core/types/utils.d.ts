@@ -13,7 +13,7 @@ export type LocalsObject = {
 export type ActionContext = {
     method: HttpMethods;
     lang: SupportedLangs;
-    req: FastifyObjects.IReq;
+    req: IRequest;
     res: FastifyObjects.IRes;
 };
 

@@ -11,7 +11,7 @@ export class LangHandler extends BaseHandler<FastifyHandlers.PreHandler> {
         return (req: IRequest, _res: FastifyObjects.IRes, done: FastifyHandlers.HandlerDone) => {
             if ('locals' in req) {
                 // TODO getting language from cookies
-                req.locals['lang'] = 'ru';
+                req.locals['lang'] = this.g.config.defaultLang;
                 done();
             } else {
                 done(

@@ -41,6 +41,11 @@ export class FastifyServer {
             },
             new NotFoundHandler(this.g).handler,
         );
+
+        /**
+         * Регистрация финального обработчика ошибок
+         */
+        //this.engine.setErrorHandler()
     }
 
     private setRoute(obj: Fastify.RouteOptions) {
