@@ -1,0 +1,57 @@
+@font-face {
+    font-family: "Montserrat", sans-serif;
+    src: url("./basics/fonts/Montserrat-Regular.woff2") format("woff2"),
+        url("./basics/fonts/Montserrat-Regular.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: "Montserrat", sans-serif;
+    src: url("./basics/fonts/Montserrat-Medium.woff2") format("woff2"),
+        url("./basics/fonts/Montserrat-Medium.woff") format("woff");
+    font-weight: 500;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: "Overpass Mono", monospace;
+    src: url("./basics/fonts/OverpassMono-Regular.woff2") format("woff2"),
+        url("./basics/fonts/OverpassMono-Regular.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: "Overpass Mono", monospace;
+    src: url("./basics/fonts/OverpassMono-Medium.woff2") format("woff2"),
+        url("./basics/fonts/OverpassMono-Medium.woff") format("woff");
+    font-weight: 500;
+    font-style: normal;
+    font-display: block;
+}
+
+@mixin font($family: false) {
+    @if $family == "ar" {
+        font-family: "Montserrat", Arial, sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    } @else if $family == "am" {
+        font-family: "Montserrat", Arial, sans-serif;
+        font-weight: 500;
+        font-style: normal;
+    } @else if $family == "br" {
+        font-family: "Overpass Mono", "Courier New", monospace;
+        font-weight: 400;
+        font-style: normal;
+    } @else if $family == "bm" {
+        font-family: "Overpass Mono", "Courier New", monospace;
+        font-weight: 500;
+        font-style: normal;
+    } @else {
+        @error "Property #{$family} is not supported in the font-mixin mixin.";
+    }
+}
