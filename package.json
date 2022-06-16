@@ -1,5 +1,5 @@
 {
-    "name": "react-ssr",
+    "name": "gp",
     "version": "1.0.0",
     "description": "",
     "type": "module",
@@ -10,14 +10,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/romaro83/react-ssr.git"
+        "url": "git+https://github.com/oramor/gp.git"
     },
     "author": "Roman Rodin",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/romaro83/react-ssr/issues"
+        "url": "https://github.com/oramor/gp/issues"
     },
-    "homepage": "https://github.com/romaro83/react-ssr#readme",
+    "homepage": "https://github.com/oramor/gp#readme",
     "dependencies": {
         "fastify": "^4.0.0-rc.3",
         "handlebars": "^4.7.7"

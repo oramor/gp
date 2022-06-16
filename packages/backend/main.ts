@@ -14,7 +14,7 @@ const config: Config = {
     port: 3000,
     domain: 'localhost',
     baseUrl: 'http://localhost',
-    templateDir: '/home/romaro/react-ssr/packages/frontend/_pub/views',
+    templateDir: '/home/romaro/gp/packages/frontend/_pub/views',
     defaultLang: 'ru',
 };
 
