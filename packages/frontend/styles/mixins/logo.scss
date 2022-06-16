@@ -1,0 +1,8 @@
+@mixin logo($style) {
+    @if $style == "basic" {
+        background: center no-repeat url(../../assets/logo-basic.svg);
+    }
+    @else {
+        @error "Property #{$family} is not supported in the font-mixin mixin.";
+    }
+}
