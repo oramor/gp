@@ -19,8 +19,12 @@
     },
     "homepage": "https://github.com/oramor/gp#readme",
     "dependencies": {
+        "@types/react": "^18.0.14",
+        "@types/react-dom": "^18.0.5",
         "fastify": "^4.0.0-rc.3",
-        "handlebars": "^4.7.7"
+        "handlebars": "^4.7.7",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0"
     },
     "devDependencies": {
         "@types/node": "^17.0.40",
