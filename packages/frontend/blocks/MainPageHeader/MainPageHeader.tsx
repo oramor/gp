@@ -1,5 +1,9 @@
+import styles from './MainPageHeader.scss';
+
 export function MainPageHeader() {
     return (
-        <div>Главпоставка</div>
-    )
+        <div>
+            <span className={styles.div}>Главпоставка</span>
+        </div>
+    );
 }

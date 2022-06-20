@@ -24,7 +24,8 @@
         "fastify": "^4.0.0-rc.3",
         "handlebars": "^4.7.7",
         "react": "^18.2.0",
-        "react-dom": "^18.2.0"
+        "react-dom": "^18.2.0",
+        "sass": "^1.52.3"
     },
     "devDependencies": {
         "@types/node": "^17.0.40",

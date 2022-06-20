@@ -8,9 +8,7 @@
         "declarationMap": true
     },
     "include": [
-        "blocks/",
-        "components/",
-        "pages/"
+        "**/*"
     ],
     "exclude": [
         "_dist",
