@@ -1,3 +1,59 @@
+@use "../../styles/fw.scss";
+
 .st-main-page {
-    background-color: white;
+    display: grid;
+    grid-template-areas:
+        "header     header      header"
+        "slogan     slogan      slogan"
+        "...        form        ..."
+        "footer     footer      footer";
+    grid-template-columns: 15% 70% 15%;
+    grid-template-rows: 10vh max-content max-content 15vh;
+    gap: 0;
+    @include fw.screen("phone") {
+        grid-template-columns: 10% 1fr 10%;
+    }
+    ._header {
+        grid-column: header;
+        grid-row: header;
+        @include fw.font("ar");
+        text-align: center;
+        font-size: 40px;
+        padding: 0;
+        @include fw.screen("tablet") {
+            font-size: 35px;
+        }
+        @include fw.screen("phone") {
+            font-size: 21px;
+        }
+    }
+    ._slogan {
+        grid-column: slogan;
+        grid-row: slogan;
+        @include fw.screen("phone") {
+            display: none;
+        }
+    }
+
+    ._form {
+        @include fw.screen("tablet") {
+            font-size: 20px;
+        }
+        @include fw.screen("phone") {
+            font-size: 18px;
+        }
+    }
+    ._footer {
+        @include fw.font("br");
+        text-align: center;
+        font-size: 250px;
+        color: fw.$gray-m;
+        padding: 0;
+        @include fw.screen("tablet") {
+            font-size: 190px;
+        }
+        @include fw.screen("phone") {
+            font-size: 125px;
+        }
+    }
 }

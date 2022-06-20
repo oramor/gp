@@ -1,0 +1,21 @@
+@mixin screen($type: "desktop") {
+    @if $type == "phone" {
+        @media screen and (max-width: 450px) {
+            @content;
+        }
+    } @else if $type == "tablet" {
+        @media screen and (max-width: 899px) {
+            @content;
+        }
+    } @else if $type == "desktop" {
+        @media screen and (min-width: 900px) {
+            @content;
+        }
+    } @else if $type == "wide" {
+        @media screen and (min-width: 1250px) {
+            @content;
+        }
+    } @else {
+        @error "Property #{$type} doesn't supported for this mixin";
+    }
+}

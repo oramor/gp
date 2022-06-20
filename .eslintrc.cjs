@@ -15,7 +15,7 @@ module.exports = {
     ],
     parserOptions: {
         // Корневая директория с проектами, относительно которой объявляются ссылк в секции [project]
-        tsconfigRootDir: '/home/romaro/react-ssr/packages',
+        tsconfigRootDir: '/home/romaro/gp/packages',
         // Следует указать все конфиги от корня, который указан в tsconfigRootDir
         project: ['backend/tsconfig.json', 'frontend/tsconfig.json'],
         // Декларация ECMAScript модулей (для commonJS использовать script)
