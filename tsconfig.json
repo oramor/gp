@@ -15,7 +15,15 @@
         "useUnknownInCatchVariables": true,
         "noPropertyAccessFromIndexSignature": true,
         "strictPropertyInitialization": true,
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "lib": [
+            "DOM",
+            "DOM.Iterable",
+            "ESNext"
+        ],
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "jsx": "react-jsx"
     },
     "references": [
         {
