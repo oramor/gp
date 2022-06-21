@@ -1,9 +1,10 @@
 import styles from './MainPageHeader.scss';
 
 export function MainPageHeader() {
+    console.log(styles);
     return (
-        <div>
-            <span className={styles.div}>Главпоставка</span>
+        <div className={styles.div}>
+            <span className={styles.span}>Главпоставка</span>
         </div>
     );
 }
