@@ -202,6 +202,7 @@ export default {
         },
     },
     devServer: {
+        //static: ['views'],
         static: {
             directory: '/home/romaro/gp/packages/customer/_public/views/',
         },

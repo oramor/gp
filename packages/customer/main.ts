@@ -1,7 +1,7 @@
 import { FastifyServer } from './core/FastifyServer';
 import { GlobalContext, Config } from './core/types/utils';
 
-// Servoses
+// Services
 import { TemplateService } from './services/templater/TemplateService';
 
 // Handlers
