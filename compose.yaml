@@ -3,23 +3,17 @@ volumes:
     name: gp-nginx-vol
     external: true
 
+networks:
+  default:
+    driver: bridge
+    attachable: true
+    enable_ipv6: false
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
+
 services:
-  test:
-    image: alpine:latest
-    container_name: gp-test
-    command: /bin/ash
-  gp-site-serv:
-    image: node:16-alpine3.15
-    container_name: gp-site-dev
-    expose: [3001]
-    ports:
-      - 3001:3001
-    volumes:
-      - type: bind
-        source: ${SITE_PATH}
-        target: ${SITE_PATH}
-    working_dir: ${SITE_PATH}
-    command: yarn s
   gp-nginx-serv:
     build: ./docker/nginx
     container_name: gp-nginx
@@ -36,13 +30,19 @@ services:
         target: /etc/static
     depends_on:
       - gp-site-serv
-
-networks:
-  default:
-    driver: bridge
-    attachable: true
-    enable_ipv6: false
-    ipam:
-      driver: default
-      config:
-        - subnet: 172.28.0.0/16
+  gp-site-serv:
+    image: node:16-alpine3.15
+    container_name: gp-site-dev
+    expose: [3001]
+    ports:
+      - 3001:3001
+    volumes:
+      - type: bind
+        source: ${SITE_PATH}
+        target: ${SITE_PATH}
+    working_dir: ${SITE_PATH}
+    command: yarn s
+  test:
+    image: alpine:latest
+    container_name: gp-test
+    command: /bin/ash
