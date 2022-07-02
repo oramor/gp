@@ -11,7 +11,7 @@ import { LangHandler } from './core/defaults/handlers/LangHandler';
 import { SiteController } from './modules/site/SiteController';
 
 const config: Config = {
-    port: 3001,
+    port: 3000,
     domain: 'localhost',
     baseUrl: 'http://localhost',
     templateDir: '/home/romaro/gp/packages/frontend/_pub/views',
