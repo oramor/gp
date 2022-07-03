@@ -19,6 +19,8 @@ const config = {
     chunkPostfix: 'Chunk',
     rootPath: 'current',
     indexFileName: 'index.ts',
+    modulesDir: env.SITE_MODULES_DIR ?? new Error('Not found modules dir in .env'),
+    modulesDirName: 'modules',
     modules: {
         site: ['MainPage'],
     },
@@ -45,29 +47,33 @@ class WebpackConfigHelper {
 
     get _pageList() {
         const modules = this.config.modules;
-        const arr = [];
+        const map = new Map();
 
-        for (const module in modules) {
-            modules[module].forEach((pageName) => {
-                if (arr.includes(pageName)) {
-                    throw new Error(`Page ${pageName} duplicated in module ${module}`);
+        for (const moduleName in modules) {
+            modules[moduleName].forEach((pageName) => {
+                if (map.has(pageName)) {
+                    throw new Error(`Page ${pageName} duplicated in module ${moduleName}`);
                 }
 
-                arr.push(pageName);
+                map.set(pageName, moduleName);
             });
         }
 
-        return arr;
+        return map;
     }
 
     get _pageEntryPointList() {
+        const modulesDirName = this.config.modulesDirName;
+        const pagesDirName = this.config.pagesDirName;
         const pages = this._pageList;
         const obj = {};
 
-        pages.forEach((pageName) => {
+        pages.forEach((moduleName, pageName) => {
             const chunkFileName = pageName + this.config.chunkPostfix + '.tsx';
             const templatePath =
-                `.${path.sep}` + path.join(this.pagesDirName, pageName, chunkFileName);
+                `.${path.sep}` +
+                path.join(modulesDirName, moduleName, pagesDirName, pageName, chunkFileName);
+
             obj[pageName] = templatePath;
         });
 
@@ -118,16 +124,20 @@ class WebpackConfigHelper {
     }
 
     get pagePlugins() {
+        const modulesDirName = this.config.modulesDirName;
+        const pagesDirName = this.config.pagesDirName;
         const pages = this._pageList;
         const arr = [];
 
-        pages.forEach((pageName) => {
+        pages.forEach((moduleName, pageName) => {
             const outputTemplatesDirName = config.outputTemplatesDirName;
             /**
              * Адрес указывается относительно контекста (srcDir).
              * Точка перед путем обязательна
              */
-            const templFilePath = './' + path.join(this.pagesDirName, pageName, pageName + '.ejs');
+            const templFilePath =
+                './' +
+                path.join(modulesDirName, moduleName, pagesDirName, pageName, pageName + '.ejs');
             /**
              * Адрес, по которому будет размещен файл. Указывается
              * относительно outDir. Здесь точка уже не нужна

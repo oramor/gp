@@ -1,4 +1,4 @@
-import { BasePageServ, PageServConstructor } from '../../core/BasePageServ';
+import { BasePageServ, PageServConstructor } from '../../../../core/BasePageServ';
 
 export class MainPageServ extends BasePageServ {
     httpStatus: HttpStatus = 200;
