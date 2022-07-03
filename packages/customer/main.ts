@@ -1,6 +1,5 @@
 import { FastifyServer } from './core/FastifyServer';
-import { GlobalContext, Config, EnvObject } from './core/types/utils';
-import * as dotenv from 'dotenv';
+import { GlobalContext, Config } from './core/types/utils';
 
 // Services
 import { TemplateService } from './services/templater/TemplateService';
@@ -11,14 +10,13 @@ import { LangHandler } from './core/defaults/handlers/LangHandler';
 // Controllers
 import { SiteController } from './modules/site/SiteController';
 
-const env = dotenv.config().parsed as EnvObject;
-
 const config: Config = {
     port: 3000,
     host: '0.0.0.0',
     domain: 'localhost',
     baseUrl: 'http://localhost',
-    templateDir: env.SITE_TEMPLATE_DIR ?? new Error('Not found templateDir in .env'),
+    templateDir:
+        process.env['SITE_TEMPLATE_DIR'] ?? '/home/romaro/gp/packages/customer/_public/views',
     defaultLang: 'ru',
 };
 
