@@ -19,7 +19,9 @@ const config = {
     chunkPostfix: 'Chunk',
     rootPath: 'current',
     indexFileName: 'index.ts',
-    pages: ['MainPage'],
+    modules: {
+        site: ['MainPage'],
+    },
 };
 
 class WebpackConfigHelper {
@@ -41,8 +43,25 @@ class WebpackConfigHelper {
         return this.config.rootPath;
     }
 
-    _getPageEntryPoints() {
-        const pages = this.config.pages;
+    get _pageList() {
+        const modules = this.config.modules;
+        const arr = [];
+
+        for (const module in modules) {
+            modules[module].forEach((pageName) => {
+                if (arr.includes(pageName)) {
+                    throw new Error(`Page ${pageName} duplicated in module ${module}`);
+                }
+
+                arr.push(pageName);
+            });
+        }
+
+        return arr;
+    }
+
+    get _pageEntryPointList() {
+        const pages = this._pageList;
         const obj = {};
 
         pages.forEach((pageName) => {
@@ -94,12 +113,12 @@ class WebpackConfigHelper {
     get entryPoints() {
         return {
             index: this.indexFilePath,
-            ...this._getPageEntryPoints(),
+            ...this._pageEntryPointList,
         };
     }
 
     get pagePlugins() {
-        const pages = this.config.pages;
+        const pages = this._pageList;
         const arr = [];
 
         pages.forEach((pageName) => {
