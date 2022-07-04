@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { ActionContext, GlobalContext } from './types/utils';
 import { ActionError } from './errors/ActionError';
 
@@ -13,7 +14,6 @@ export abstract class BasePageServ {
     protected g: GlobalContext;
     protected ctx: ActionContext;
     protected props?: PlaceholdersNode;
-    protected templatesDirAbsolutePath: string;
 
     //TODO this is an external dependency for core. Maybe implement BaseServer.setTemplateService?
     // or do this as a config required?
@@ -40,7 +40,6 @@ export abstract class BasePageServ {
         this.propsPlaceholders = args[2] ?? {};
         this.selfPlaceholders = {};
 
-        this.templatesDirAbsolutePath = this.g.config.templateDir;
         this.templateService = this.g.templater;
     }
 
@@ -75,11 +74,13 @@ export abstract class BasePageServ {
     }
 
     private get pageName(): string {
-        return this.constructor.name;
+        return this.constructor.name.replace('Serv', '');
     }
 
     private get templatePath(): string {
-        return this.templatesDirAbsolutePath + '/' + this.pageName + '.html';
+        const templPath = this.g.config.templatesDir;
+        const templExt = '.' + 'hbs';
+        return path.join(templPath, this.pageName + templExt);
     }
 
     private getDictPlaceholders(lang: SupportedLangs): PlaceholdersNode {

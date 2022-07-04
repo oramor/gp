@@ -22,7 +22,8 @@ export type Config = Readonly<{
     host: string;
     domain: string;
     baseUrl: string;
-    templateDir: string;
+    templatesDir: string;
+    templatesExtension: string;
     defaultLang: SupportedLangs;
     defaults?: {
         services?: {

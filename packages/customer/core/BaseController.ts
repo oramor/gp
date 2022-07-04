@@ -102,6 +102,7 @@ export abstract class BaseController<T extends BaseUri> {
                     }
                     case 'render': {
                         const rs = result as ActionResult<PageResult>;
+                        res.header('content-type', 'text/html; charset=utf-8');
                         return res.send(await rs.htmlPromise);
                     }
                     default:
