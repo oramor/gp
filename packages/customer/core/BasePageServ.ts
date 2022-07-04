@@ -70,6 +70,7 @@ export abstract class BasePageServ {
         return {
             props: this.propsPlaceholders,
             self: this.selfPlaceholders,
+            dict: this.getDictPlaceholders(this.ctx.lang),
         };
     }
 
@@ -79,5 +80,13 @@ export abstract class BasePageServ {
 
     private get templatePath(): string {
         return this.templatesDirAbsolutePath + '/' + this.pageName + '.html';
+    }
+
+    private getDictPlaceholders(lang: SupportedLangs): PlaceholdersNode {
+        const obj: PlaceholdersNode = {};
+        for (const placeholderName in this.dictionary) {
+            obj[placeholderName] = this.dictionary[placeholderName][lang];
+        }
+        return obj;
     }
 }

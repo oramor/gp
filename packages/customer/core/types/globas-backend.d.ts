@@ -22,6 +22,7 @@ type PlaceholdersNode = Record<string, PlaceholderValue>;
 type PlaceholdersObject = {
     props?: PlaceholdersNode;
     self?: PlaceholdersNode;
+    dict?: PlaceholdersNode;
 };
 
 type PlaceholdersFrom<
