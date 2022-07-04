@@ -17,6 +17,7 @@ const config = {
     outputDirName: '_public',
     outputTemplatesDirName:
         env.SITE_TEMPLATE_DIR_NAME ?? new Error('Not found template dir name in .env'),
+    templatesExtension: env.SITE_TEMPLATE_EXT ?? new Error('Not found templates extension in .env'),
     chunkPostfix: 'Chunk',
     rootPath: 'current',
     indexFileName: 'index.ts',
@@ -144,7 +145,10 @@ class WebpackConfigHelper {
              * Адрес, по которому будет размещен файл. Указывается
              * относительно outDir. Здесь точка уже не нужна
              */
-            const filePath = path.join(outputTemplatesDirName, pageName + '.hbs');
+            const filePath = path.join(
+                outputTemplatesDirName,
+                pageName + '.' + config.templatesExtension,
+            );
             /**
              * Чанки идентифицируются по именам файлов точек входа,
              * которые были переданы в оъект параметра entry
