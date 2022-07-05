@@ -4,7 +4,7 @@
         "target": "ESNext",
         "moduleResolution": "Node",
         "rootDir": ".",
-        "outDir": "_dist",
+        "outDir": "_public",
         "composite": true,
         "declaration": true,
         "declarationMap": true
@@ -13,7 +13,7 @@
         "**/*"
     ],
     "exclude": [
-        "_dist",
-        "_pub"
+        "_public",
+        "_server"
     ]
 }

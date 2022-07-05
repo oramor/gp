@@ -1,9 +1,14 @@
 {
+    "ts-node": {
+        "transpileOnly": false,
+        "files": true,
+        "compilerOptions": {}
+    },
     "extends": "../../tsconfig.json",
     "compilerOptions": {
         "module": "commonjs",
         "rootDir": ".",
-        "outDir": "_dist",
+        "outDir": "_server",
         "target": "ESNext",
         "moduleResolution": "Node",
         "allowSyntheticDefaultImports": true,
@@ -16,6 +21,7 @@
         "**/*"
     ],
     "exclude": [
-        "_dist"
+        "_public",
+        "_server"
     ]
 }

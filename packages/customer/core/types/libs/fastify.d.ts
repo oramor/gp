@@ -10,7 +10,8 @@ export namespace FastifyHandlers {
      * Видимо, внутри данной функции всегда должен вызываться метод send()
      * для завершения обработки запроса
      */
-    export type RouteHandler = Fastify.RouteHandler;
+    //export type RouteHandler = Fastify.RouteHandler;
+    export type RouteHandler = (req: FastifyObjects.IReq, res: FastifyObjects.IRes) => void;
 
     /**
      * Функции для предварительной обработки запросов

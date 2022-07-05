@@ -30,7 +30,7 @@
             "path": "./packages/customer/tsconfig.server.json"
         },
         {
-            "path": "./packages/customer/tsconfig.web.json"
+            "path": "./packages/customer/tsconfig.public.json"
         }
     ],
     "exclude": [
