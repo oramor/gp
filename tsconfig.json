@@ -27,10 +27,10 @@
     },
     "references": [
         {
-            "path": "./packages/backend"
+            "path": "./packages/customer/tsconfig.server.json"
         },
         {
-            "path": "./packages/frontend"
+            "path": "./packages/customer/tsconfig.web.json"
         }
     ],
     "exclude": [
