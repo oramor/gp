@@ -5,6 +5,7 @@
     "type": "module",
     "scripts": {
         "wbd": "npx webpack --config webpack.dev.js",
+        "serv": "npx webpack serve --config webpack.dev.js",
         "s": "npx ts-node --project packages/customer/tsconfig.json packages/customer/main.ts"
     },
     "repository": {
