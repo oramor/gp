@@ -22,18 +22,15 @@
             "ESNext"
         ],
         "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "jsx": "react-jsx"
+        "allowSyntheticDefaultImports": true
     },
     "references": [
         {
-            "path": "./packages/customer/tsconfig.server.json"
-        },
-        {
-            "path": "./packages/customer/tsconfig.public.json"
+            "path": "packages/customer"
         }
     ],
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "drafts"
     ],
 }

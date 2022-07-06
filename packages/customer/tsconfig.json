@@ -6,16 +6,17 @@
     },
     "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "module": "commonjs",
+        "composite": true,
+        "module": "ES2020",
         "rootDir": ".",
-        "outDir": "_server",
+        "outDir": "_public",
         "target": "ESNext",
         "moduleResolution": "Node",
         "allowSyntheticDefaultImports": true,
         "useUnknownInCatchVariables": false,
-        "composite": true,
         "declaration": true,
-        "declarationMap": true
+        "declarationMap": true,
+        "jsx": "react-jsx"
     },
     "include": [
         "**/*"

@@ -10,7 +10,8 @@ yarn add -D webpack webpack-cli clean-webpack-plugin webpack-dev-server
 
 # React
 ```
-yarn add react react-dom @types/react @types/react-dom
+yarn add react react-dom 
+yarn add -D @types/react @types/react-dom
 ```
 
 # SASS
