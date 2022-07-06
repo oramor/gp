@@ -14,10 +14,10 @@ module.exports = {
         'prettier',
     ],
     parserOptions: {
-        // Корневая директория с проектами, относительно которой объявляются ссылк в секции [project]
+        // Корневая директория с проектами, относительно которой объявляются ссылки в секции [project]
         tsconfigRootDir: '/home/romaro/gp/packages',
         // Следует указать все конфиги от корня, который указан в tsconfigRootDir
-        project: ['backend/tsconfig.json', 'frontend/tsconfig.json'],
+        project: ['customer/tsconfig.json', '../drafts'],
         // Декларация ECMAScript модулей (для commonJS использовать script)
         sourceType: 'module',
         ecmaVersion: 2021,

@@ -9,6 +9,7 @@ const config = {
     pagesDirName: 'pages',
     projectsDirName: 'packages',
     currentProjectDirName: 'customer',
+    sourceDirName: 'source',
     outputDirName: '_public',
     outputTemplatesDirName: 'views',
     chunkPostfix: 'Chunk',
@@ -75,9 +76,20 @@ class WebpackConfigHelper {
         return this.projectDir;
     }
 
+    get indexFilePath() {
+        const fileName = this.config.indexFileName;
+        const sourceDirName = this.config.sourceDirName;
+
+        /**
+         * Путь указыватся относительно директории
+         * контекста (contextDir)
+         */
+        return './' + path.join(sourceDirName, fileName);
+    }
+
     get entryPoints() {
         return {
-            index: './' + path.join(this.contextDir, this.config.indexFileName),
+            index: this.indexFilePath,
             ...this._getPageEntryPoints(),
         };
     }
@@ -148,6 +160,7 @@ export default {
                         loader: 'ts-loader',
                         options: {
                             configFile: 'tsconfig.json',
+                            transpileOnly: true,
                         },
                     },
                 ],
@@ -169,7 +182,7 @@ export default {
             },
         ],
     },
-    plugins: [new CleanWebpackPlugin(), ...helper.getPagePlugins()],
+    plugins: [new CleanWebpackPlugin(), ...helper.pagePlugins],
     optimization: {
         minimize: false,
         splitChunks: {

@@ -28,9 +28,9 @@ abstract class BaseNormalizer {
     [K: string]: NormalizerDelegate<string> | NormalizerDelegate<number>;
 }
 
-abstract class BaseParser {
-    [K in Parsers]: ParserDelegate;
-}
+// abstract class BaseParser {
+//     [K in Parsers]: ParserDelegate;
+// }
 
 class Normalizer extends BaseNormalizer {
     static email(v: string) {
@@ -58,7 +58,7 @@ export abstract class BaseForm {
     }
 
     private parse(value: string | number, node: ParseNode) {
-        for (let parseMethod in node) {
+        for (const parseMethod in node) {
             // this.g.parse[parseMethod](v)
         }
     }

@@ -4,7 +4,7 @@
     "description": "",
     "type": "module",
     "scripts": {
-        "wb": "npx webpack",
+        "wbd": "npx webpack --config webpack.dev.js",
         "s": "npx ts-node --project packages/customer/tsconfig.json packages/customer/main.ts"
     },
     "repository": {
