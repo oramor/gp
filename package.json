@@ -6,7 +6,7 @@
     "scripts": {
         "wbd": "npx webpack --config webpack.dev.js",
         "serv": "npx webpack serve --config webpack.dev.js",
-        "s": "npx ts-node --esm --project packages/customer/tsconfig.json packages/customer/main.ts"
+        "s": "npx ts-node --project packages/customer/tsconfig.json packages/customer/main.ts"
     },
     "repository": {
         "type": "git",

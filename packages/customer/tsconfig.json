@@ -2,7 +2,10 @@
     "ts-node": {
         "transpileOnly": false,
         "files": true,
-        "compilerOptions": {}
+        "compilerOptions": {
+            "module": "commonjs",
+            "target": "ESNext",
+        }
     },
     "extends": "../../tsconfig.json",
     "compilerOptions": {
@@ -10,7 +13,7 @@
         "module": "ES2020",
         "rootDir": ".",
         "outDir": "_public",
-        "target": "ESNext",
+        "target": "ES2020",
         "moduleResolution": "Node",
         "allowSyntheticDefaultImports": true,
         "useUnknownInCatchVariables": false,
