@@ -27,5 +27,8 @@ services:
       - type: volume
         source: nginx-vol
         target: /var/log/nginx
+      - type: bind
+        source: /home/romaro/gp/files
+        target: /etc/static
     depends_on:
       - site
