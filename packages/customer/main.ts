@@ -1,4 +1,4 @@
-import { FastifyServer } from './core/FastifyServer';
+import { FastifyServer } from './core/FastifyServer.js';
 import { GlobalContext, Config } from './core/types/utils';
 
 // Services

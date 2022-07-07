@@ -203,7 +203,7 @@ export default {
     },
     devServer: {
         static: {
-            directory: '/home/romaro/gp/packages/customer/',
+            directory: '/home/romaro/gp/packages/customer/_public/views',
         },
         compress: true,
         port: 9000,
