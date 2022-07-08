@@ -4,12 +4,16 @@ volumes:
     external: true
 
 services:
+  test:
+    image: alpine:latest
+    container_name: gp-test
+    command: /bin/ash
   gp-site-serv:
     image: node:16-alpine3.15
     container_name: gp-site-dev
-    expose: [5000]
+    expose: [3001]
     ports:
-      - 3000:5000
+      - 3001:3001
     volumes:
       - type: bind
         source: ${SITE_PATH}
@@ -32,3 +36,13 @@ services:
         target: /etc/static
     depends_on:
       - gp-site-serv
+
+networks:
+  default:
+    driver: bridge
+    attachable: true
+    enable_ipv6: false
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16
