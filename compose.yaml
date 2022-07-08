@@ -7,14 +7,14 @@ services:
   gp-site-serv:
     image: node:16-alpine3.15
     container_name: gp-site-dev
-    expose: [3000]
+    expose: [5000]
     ports:
-      - 3000:3000
+      - 3000:5000
     volumes:
       - type: bind
-        source: /home/romaro/gp
-        target: /home/romaro/gp
-    working_dir: /home/romaro/gp
+        source: ${SITE_PATH}
+        target: ${SITE_PATH}
+    working_dir: ${SITE_PATH}
     command: yarn s
   gp-nginx-serv:
     build: ./docker/nginx
@@ -28,7 +28,7 @@ services:
         source: nginx-vol
         target: /var/log/nginx
       - type: bind
-        source: /home/romaro/gp/files
+        source: ${NGINX_CONFIG_SRC}
         target: /etc/static
     depends_on:
       - gp-site-serv
