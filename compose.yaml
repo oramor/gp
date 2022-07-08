@@ -4,7 +4,7 @@ volumes:
     external: true
 
 services:
-  site:
+  gp-site-serv:
     image: node:16-alpine3.15
     container_name: gp-site-dev
     expose: [3000]
@@ -16,7 +16,7 @@ services:
         target: /home/romaro/gp
     working_dir: /home/romaro/gp
     command: yarn s
-  nginx:
+  gp-nginx-serv:
     build: ./docker/nginx
     container_name: gp-nginx
     expose: [80, 443]
@@ -31,4 +31,4 @@ services:
         source: /home/romaro/gp/files
         target: /etc/static
     depends_on:
-      - site
+      - gp-site-serv
