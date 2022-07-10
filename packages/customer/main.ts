@@ -12,6 +12,7 @@ import { SiteController } from './modules/site/SiteController';
 
 const config: Config = {
     port: 3000,
+    host: '0.0.0.0',
     domain: 'localhost',
     baseUrl: 'http://localhost',
     templateDir: '/home/romaro/gp/packages/frontend/_pub/views',

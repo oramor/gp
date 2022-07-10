@@ -53,7 +53,13 @@ export class FastifyServer {
     }
 
     public start() {
-        this.engine.listen({ port: this.g.config.port }, (err) => {
+        const port = this.g.config.port;
+        /**
+         * Option { host: '0.0.0.0' } is very important for Docker deploying
+         * See https://www.fastify.io/docs/latest/Reference/Server/#listen
+         */
+        const host = this.g.config.host;
+        this.engine.listen({ port, host }, (err) => {
             if (err) throw err;
         });
     }

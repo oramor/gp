@@ -1,1 +1,5 @@
-FROM node:16-alpine3.15
+FROM node:17.9-alpine3.14
+
+USER root
+
+RUN npm i -g typescript ts-node

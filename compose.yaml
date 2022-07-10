@@ -1,3 +1,8 @@
+volumes:
+  nginx-vol:
+    name: gp-nginx-vol
+    external: true
+
 networks:
   default:
     driver: bridge
@@ -9,16 +14,34 @@ networks:
         - subnet: 172.28.0.0/16
 
 services:
+  nginx:
+    build: ./docker/nginx
+    container_name: gp-nginx
+    expose: [80, 443]
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - type: volume
+        source: nginx-vol
+        target: /var/log/nginx
+      - type: bind
+        source: ${NGINX_CONFIG_FILE_SRC}
+        target: /etc/nginx/nginx.conf
+      - type: bind
+        source: ${NGINX_STATIC_FILES_DIR}
+        target: /etc/static
+    depends_on:
+      - site
   site:
-    image: node:16-alpine3.15
-    container_name: gp-site-dev
-    hostname: gp-site
+    build: ./docker/site
+    container_name: gp-site
     expose: [3000]
     ports:
       - 3000:3000
     volumes:
       - type: bind
-        source: ${SITE_PATH}
-        target: ${SITE_PATH}
-    working_dir: ${SITE_PATH}
-    command: yarn s
+        source: ${ROOT_DIR}
+        target: ${ROOT_DIR}
+    working_dir: ${SITE_DIR}
+    command: ts-node main.ts

@@ -19,6 +19,7 @@ export type ActionContext = {
 
 export type Config = Readonly<{
     port: number;
+    host: string;
     domain: string;
     baseUrl: string;
     templateDir: string;
