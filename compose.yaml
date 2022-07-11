@@ -29,8 +29,11 @@ services:
         source: ${NGINX_CONFIG_FILE_SRC}
         target: /etc/nginx/nginx.conf
       - type: bind
-        source: ${NGINX_STATIC_FILES_DIR}
-        target: /etc/static
+        source: ${SITE_STATIC_DIR}
+        target: /etc/site/static
+      - type: bind
+        source: ${SITE_BUNDLE_DIR}
+        target: /etc/site/bundle
     depends_on:
       - site
   site:

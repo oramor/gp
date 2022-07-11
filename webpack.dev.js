@@ -4,6 +4,9 @@ import { access } from 'node:fs/promises';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import HtmlWebpackInjector from 'html-webpack-injector';
+import * as dotenv from 'dotenv';
+
+const env = dotenv.config().parsed;
 
 const config = {
     pagesDirName: 'pages',
@@ -11,7 +14,8 @@ const config = {
     currentProjectDirName: 'customer',
     sourceDirName: 'source',
     outputDirName: '_public',
-    outputTemplatesDirName: 'views',
+    outputTemplatesDirName:
+        env.SITE_TEMPLATE_DIR_NAME ?? new Error('Not found template dir name in .env'),
     chunkPostfix: 'Chunk',
     rootPath: 'current',
     indexFileName: 'index.ts',

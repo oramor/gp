@@ -1,3 +1,8 @@
+# Utils
+```
+yarn add -D dotenv
+```
+
 # TS
 ```
 yarn add -D typescript ts-node @types/node ts-loader

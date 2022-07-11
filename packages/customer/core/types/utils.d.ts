@@ -33,6 +33,10 @@ export type Config = Readonly<{
     };
 }>;
 
+export type EnvObject = Readonly<{
+    SITE_TEMPLATE_DIR: string;
+}>;
+
 /**
  * У Fastify нет предустановленного поля в объекте запроса,
  * через который можно транспортировать данные. Поэтому данное поле
