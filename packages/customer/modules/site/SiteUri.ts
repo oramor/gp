@@ -8,8 +8,4 @@ export class SiteUri extends BaseUri {
     public get index() {
         return '/';
     }
-
-    public get favicon() {
-        return '/favicon.ico';
-    }
 }
