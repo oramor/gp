@@ -3,4 +3,3 @@ yarn.lock
 packages/**/_public/
 packages/**/_server/
 files/
-.env
