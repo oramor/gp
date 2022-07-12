@@ -1,47 +1,58 @@
-@use '../../../../source/styles/fw.scss';
+@use "../../../../source/styles/fw.scss";
 
 .p-main {
     display: grid;
     grid-template-areas:
-        'header     header      header'
-        'slogan     slogan      slogan'
-        '...        form        ...';
+        "header     header      header"
+        "slogan     slogan      slogan"
+        "...        form        ...";
     grid-template-columns: 15% 70% 15%;
-    grid-template-rows: 10vh max-content max-content;
+    grid-template-rows: max-content max-content max-content;
     gap: 0;
-    @include fw.screen('phone') {
+    @include fw.screen("phone") {
         grid-template-columns: 10% 1fr 10%;
     }
     ._header {
         grid-column: header;
         grid-row: header;
-        @include fw.font('ar');
-        text-align: center;
-        font-size: 215px;
-        padding: 0;
-        @include fw.screen('tablet') {
-            font-size: 150px;
-        }
-        @include fw.screen('phone') {
-            font-size: 59px;
+        background-color: fw.$col-brand-bg;
+        display: flex;
+        justify-content: center;
+        span {
+            padding-bottom: 20px;
+            @include fw.font("ar");
+            font-size: 130px;
+            @include fw.screen("tablet") {
+                font-size: 13vi;
+            }
+            @include fw.screen("phone") {
+                padding-bottom: 5px;
+            }
         }
     }
     ._slogan {
         grid-column: slogan;
         grid-row: slogan;
-        @include fw.font('br');
-        text-align: center;
-        font-size: 100px;
-        @include fw.screen('phone') {
-            display: none;
+        display: flex;
+        justify-content: center;
+        span {
+            color: fw.$col-brand-accent;
+            @include fw.font("bm");
+            font-size: 70px;
+            @include fw.screen("tablet") {
+                font-size: 7vi;
+            }
+            @include fw.screen("phone") {
+                display: none;
+            }
         }
     }
 
     ._form {
-        @include fw.screen('tablet') {
+        @include fw.screen("tablet") {
             font-size: 20px;
         }
-        @include fw.screen('phone') {
+        @include fw.screen("phone") {
             font-size: 18px;
         }
     }

@@ -1,17 +1,20 @@
-@use '../../styles/fw.scss';
+@use "../../styles/fw.scss";
 
 .b-footer {
-    padding: 20px 0;
+    padding: 15px 0;
     border-top: 3px dotted fw.$col-brand-accent;
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
     ._date {
-        @include fw.font('br');
+        @include fw.font("br");
         text-align: center;
         font-size: 35px;
         color: grey;
-        @include fw.screen('tablet') {
+        @include fw.screen("tablet") {
             font-size: 30px;
         }
-        @include fw.screen('phone') {
+        @include fw.screen("phone") {
             font-size: 25px;
         }
     }

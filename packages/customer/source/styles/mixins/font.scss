@@ -36,19 +36,19 @@
 
 @mixin font($family: false) {
     @if $family == "ar" {
-        font-family: "Montserrat", Arial, sans-serif;
+        font-family: "Montserrat", sans-serif;
         font-weight: 400;
         font-style: normal;
     } @else if $family == "am" {
-        font-family: "Montserrat", Arial, sans-serif;
+        font-family: "Montserrat", sans-serif;
         font-weight: 500;
         font-style: normal;
     } @else if $family == "br" {
-        font-family: "Overpass Mono", "Courier New", monospace;
+        font-family: "Overpass Mono", monospace;
         font-weight: 400;
         font-style: normal;
     } @else if $family == "bm" {
-        font-family: "Overpass Mono", "Courier New", monospace;
+        font-family: "Overpass Mono", monospace;
         font-weight: 500;
         font-style: normal;
     } @else {
