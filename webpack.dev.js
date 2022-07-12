@@ -4,6 +4,7 @@ import { access } from 'node:fs/promises';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import HtmlWebpackInjector from 'html-webpack-injector';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import * as dotenv from 'dotenv';
 
 const env = dotenv.config().parsed;
@@ -19,6 +20,7 @@ const config = {
     chunkPostfix: 'Chunk',
     rootPath: 'current',
     indexFileName: 'index.ts',
+    commonCssFileName: 'style.css',
     modulesDir: env.SITE_MODULES_DIR ?? new Error('Not found modules dir in .env'),
     modulesDirName: 'modules',
     modules: {
@@ -213,9 +215,26 @@ export default {
                     },
                 ],
             },
+            {
+                test: /\.s[ac]ss$/,
+                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+            },
+            {
+                test: /\.woff(2)?$/,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'fonts/[hash][ext][query]',
+                },
+            },
         ],
     },
-    plugins: [new CleanWebpackPlugin(), ...helper.pagePlugins],
+    plugins: [
+        new CleanWebpackPlugin(),
+        new MiniCssExtractPlugin({
+            filename: helper.config.commonCssFileName,
+        }),
+        ...helper.pagePlugins,
+    ],
     optimization: {
         minimize: false,
         splitChunks: {
