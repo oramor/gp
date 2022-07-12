@@ -20,8 +20,8 @@ type PlaceholderValue = Primitives | Record<string, Primitives>;
 type PlaceholdersNode = Record<string, PlaceholderValue>;
 
 type PlaceholdersObject = {
-    static?: PlaceholdersNode;
     props?: PlaceholdersNode;
+    self?: PlaceholdersNode;
 };
 
 type PlaceholdersFrom<

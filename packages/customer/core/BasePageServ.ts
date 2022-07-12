@@ -15,7 +15,7 @@ export abstract class BasePageServ {
     protected props?: PlaceholdersNode;
     protected templatesDirAbsolutePath: string;
 
-    //TODO this is an external dependency for core. Mayby implement BaseServer.setTemplateService?
+    //TODO this is an external dependency for core. Maybe implement BaseServer.setTemplateService?
     // or do this as a config required?
     private templateService;
 
@@ -30,7 +30,7 @@ export abstract class BasePageServ {
      * В отличие от propsPlaceholders, эти плейсхолдеры явно прописываются
      * в классе страницы. Это максимально статичные данные.
      */
-    private staticPlaceholders: PlaceholdersNode;
+    private selfPlaceholders: PlaceholdersNode;
 
     constructor(...args: ConstructorParameters<PageServConstructor>) {
         this.g = args[0];
@@ -38,7 +38,7 @@ export abstract class BasePageServ {
 
         // Placeholdes root nodes
         this.propsPlaceholders = args[2] ?? {};
-        this.staticPlaceholders = {};
+        this.selfPlaceholders = {};
 
         this.templatesDirAbsolutePath = this.g.config.templateDir;
         this.templateService = this.g.templater;
@@ -68,8 +68,8 @@ export abstract class BasePageServ {
      */
     private get placeholders(): PlaceholdersObject {
         return {
-            static: this.staticPlaceholders,
             props: this.propsPlaceholders,
+            self: this.selfPlaceholders,
         };
     }
 
