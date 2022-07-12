@@ -1,5 +1,14 @@
-@use "../styles/libs/index";
-@use "../styles/mixins/index";
+// Libs
+@use '../styles/libs/colors.scss';
+@use '../styles/libs/reset.scss';
 
 // Mixins
-@use "../styles/mixins/font.scss";
+@use '../styles/mixins/font.scss';
+@use '../styles/mixins/screen.scss';
+@use '../styles/mixins/logo.scss';
+
+// Pages
+@use '../../modules/site/pages/MainPage/MainPage.scss';
+
+// Blocks
+@use '../blocks/FooterBlock/FooterBlock.scss';

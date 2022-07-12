@@ -1,7 +1,7 @@
 @font-face {
     font-family: "Montserrat", sans-serif;
-    src: url("./basics/fonts/Montserrat-Regular.woff2") format("woff2"),
-        url("./basics/fonts/Montserrat-Regular.woff") format("woff");
+    src: url("../fonts/Montserrat-Regular.woff2") format("woff2"),
+        url("../fonts/Montserrat-Regular.woff") format("woff");
     font-weight: 400;
     font-style: normal;
     font-display: block;
@@ -9,8 +9,8 @@
 
 @font-face {
     font-family: "Montserrat", sans-serif;
-    src: url("./basics/fonts/Montserrat-Medium.woff2") format("woff2"),
-        url("./basics/fonts/Montserrat-Medium.woff") format("woff");
+    src: url("../fonts/Montserrat-Medium.woff2") format("woff2"),
+        url("../fonts/Montserrat-Medium.woff") format("woff");
     font-weight: 500;
     font-style: normal;
     font-display: block;
@@ -18,8 +18,8 @@
 
 @font-face {
     font-family: "Overpass Mono", monospace;
-    src: url("./basics/fonts/OverpassMono-Regular.woff2") format("woff2"),
-        url("./basics/fonts/OverpassMono-Regular.woff") format("woff");
+    src: url("../fonts/OverpassMono-Regular.woff2") format("woff2"),
+        url("../fonts/OverpassMono-Regular.woff") format("woff");
     font-weight: 400;
     font-style: normal;
     font-display: block;
@@ -27,8 +27,8 @@
 
 @font-face {
     font-family: "Overpass Mono", monospace;
-    src: url("./basics/fonts/OverpassMono-Medium.woff2") format("woff2"),
-        url("./basics/fonts/OverpassMono-Medium.woff") format("woff");
+    src: url("../fonts/OverpassMono-Medium.woff2") format("woff2"),
+        url("../fonts/OverpassMono-Medium.woff") format("woff");
     font-weight: 500;
     font-style: normal;
     font-display: block;
