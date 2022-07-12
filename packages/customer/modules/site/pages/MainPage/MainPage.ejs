@@ -1,22 +1,23 @@
 <!DOCTYPE html>
 <html lang="ru">
 
-<%- include ../../../../source/blocks/Head/Head.ejs -%>
+<%- include ../../../../source/blocks/HeadBlock/HeadBlock.ejs -%>
 
 <body>
-    <div id="app"></div>
-    <div id="header">
-        {{{ headerBlock }}}
-    </div>
-    <div id="slogan">
-        {{{ sloganBlock }}}
-    </div>
-    <div id="login-form">
-        {{{ loginFormBlock }}}
-    </div>
-    <div id="footer">
-        {{{ footerBlock }}}
-    </div>
+    <main class="p-main">
+        <div class="_header">
+            <span>{{dict.title}}</span>
+        </div>
+        <div class="_slogan">
+            <span>{{dict.slogan}}</span>
+        </div>
+        <div id="login-form">
+            {{{LoginFormBlock}}}
+        </div>
+    </main>
+
+    <%- include ../../../../source/blocks/FooterBlock/FooterBlock.ejs -%>
+
 </body>
 
 </html>

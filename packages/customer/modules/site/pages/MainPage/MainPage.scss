@@ -1,59 +1,48 @@
-@use "../../../../source/styles/fw.scss";
+@use '../../../../source/styles/fw.scss';
 
-.st-main-page {
+.p-main {
     display: grid;
     grid-template-areas:
-        "header     header      header"
-        "slogan     slogan      slogan"
-        "...        form        ..."
-        "footer     footer      footer";
+        'header     header      header'
+        'slogan     slogan      slogan'
+        '...        form        ...';
     grid-template-columns: 15% 70% 15%;
-    grid-template-rows: 10vh max-content max-content 15vh;
+    grid-template-rows: 10vh max-content max-content;
     gap: 0;
-    @include fw.screen("phone") {
+    @include fw.screen('phone') {
         grid-template-columns: 10% 1fr 10%;
     }
     ._header {
         grid-column: header;
         grid-row: header;
-        @include fw.font("ar");
+        @include fw.font('ar');
         text-align: center;
-        font-size: 40px;
+        font-size: 215px;
         padding: 0;
-        @include fw.screen("tablet") {
-            font-size: 35px;
+        @include fw.screen('tablet') {
+            font-size: 150px;
         }
-        @include fw.screen("phone") {
-            font-size: 21px;
+        @include fw.screen('phone') {
+            font-size: 59px;
         }
     }
     ._slogan {
         grid-column: slogan;
         grid-row: slogan;
-        @include fw.screen("phone") {
+        @include fw.font('br');
+        text-align: center;
+        font-size: 100px;
+        @include fw.screen('phone') {
             display: none;
         }
     }
 
     ._form {
-        @include fw.screen("tablet") {
+        @include fw.screen('tablet') {
             font-size: 20px;
         }
-        @include fw.screen("phone") {
+        @include fw.screen('phone') {
             font-size: 18px;
-        }
-    }
-    ._footer {
-        @include fw.font("br");
-        text-align: center;
-        font-size: 250px;
-        color: fw.$gray-m;
-        padding: 0;
-        @include fw.screen("tablet") {
-            font-size: 190px;
-        }
-        @include fw.screen("phone") {
-            font-size: 125px;
         }
     }
 }
