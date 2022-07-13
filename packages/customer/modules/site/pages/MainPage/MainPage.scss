@@ -73,11 +73,11 @@
         flex-direction: column;
         text-align: center;
         a:nth-child(1) {
-            margin-bottom: 5px;
+            margin-bottom: 10px;
             @include fw.link("solid", 25px);
         }
         a:nth-child(2) {
-            @include fw.link("solid", 21px);
+            @include fw.link("solid", 22px);
         }
     }
 }
