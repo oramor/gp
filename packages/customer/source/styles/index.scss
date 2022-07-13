@@ -1,12 +1,12 @@
 // Libs
-@use "../styles/libs/colors.scss";
 @use "../styles/libs/reset.scss";
+@use "../styles/libs/colors.scss";
 
 // Mixins
 @use "../styles/mixins/font.scss";
+@use "../styles/mixins/link.scss";
 @use "../styles/mixins/screen.scss";
 @use "../styles/mixins/logo.scss";
-@use "../styles/mixins/link.scss";
 
 // Pages
 @use "../../modules/site/pages/MainPage/MainPage.scss";
