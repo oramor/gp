@@ -1,3 +1,7 @@
-@forward './mixins/screen.scss';
-@forward './mixins/font.scss';
-@forward './libs/colors.scss';
+// Libs
+@forward "./libs/colors.scss";
+
+// Mixins
+@forward "./mixins/screen.scss";
+@forward "./mixins/font.scss";
+@forward "./mixins/link.scss";

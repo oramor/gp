@@ -3,19 +3,19 @@
 .b-footer {
     padding: 15px 0;
     border-top: 3px dotted fw.$col-brand-accent;
-    margin-top: 25px;
+    margin-top: 45px;
     display: flex;
     justify-content: center;
     ._date {
         @include fw.font("br");
         text-align: center;
-        font-size: 35px;
+        font-size: 30px;
         color: grey;
         @include fw.screen("tablet") {
-            font-size: 30px;
+            font-size: 25px;
         }
         @include fw.screen("phone") {
-            font-size: 25px;
+            font-size: 20px;
         }
     }
 }

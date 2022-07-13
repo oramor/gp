@@ -1,0 +1,18 @@
+@use "../libs/colors.scss";
+//@use "../mixins/font.scss";
+
+@mixin link($style: "solid", $size: 14px) {
+    @if $style == "solid" {
+        text-decoration: none;
+        border-bottom: 3px solid colors.$col-link-undeline;
+        padding-bottom: 0px;
+        font-size: $size;
+    } @else if $style == "dotted" {
+        text-decoration: none;
+        border-bottom: 3px dotted colors.$col-link-undeline;
+        padding-bottom: 0px;
+        font-size: $size;
+    } @else {
+        @error "Property #{$style} is not supported for the link mixin";
+    }
+}
