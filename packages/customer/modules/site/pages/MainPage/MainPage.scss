@@ -21,11 +21,7 @@
         justify-content: center;
         span {
             padding-bottom: 20px;
-            @include fw.font("ar");
-            font-size: 130px;
-            @include fw.screen("tablet") {
-                font-size: 13vi;
-            }
+            @include fw.font("ar", clamp(30px, 12vw, 145px));
             @include fw.screen("phone") {
                 padding-bottom: 5px;
             }
@@ -38,11 +34,7 @@
         margin-bottom: 25px;
         span {
             color: fw.$col-brand-accent;
-            @include fw.font("bm");
-            font-size: 70px;
-            @include fw.screen("tablet") {
-                font-size: 7vi;
-            }
+            @include fw.font("bm", clamp(25px, 6vw, 70px));
             @include fw.screen("phone") {
                 display: none;
             }

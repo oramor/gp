@@ -8,6 +8,9 @@
         text-decoration-thickness: 3px;
         text-underline-offset: 6px;
         @include font.font("br", $size);
+        &:hover {
+            text-decoration-color: colors.$col-link-undeline-hover;
+        }
     } @else if $style == "dotted" {
         text-decoration-skip-ink: none;
         text-decoration-color: colors.$col-link-undeline;
@@ -15,6 +18,9 @@
         text-underline-offset: 6px;
         text-decoration-style: dotted;
         @include font.font("br", $size);
+        &:hover {
+            text-decoration-color: colors.$col-link-undeline-hover;
+        }
     } @else {
         @error "Property #{$style} is not supported for the link mixin";
     }
