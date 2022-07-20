@@ -1,5 +1,9 @@
-export class Validator {
-    public validatorFactory(type: Validators): ValidatorFunction | void {
+import { AbstractValidator, ValidatorDelegate } from '../core/AbstractValidator';
+
+type Validators = 'string' | 'email' | 'phone';
+
+export class Validator extends AbstractValidator<Validators> {
+    public validatorFactory(type: Validators): ValidatorDelegate | void {
         switch (type) {
             case 'string':
                 return this.isString;
