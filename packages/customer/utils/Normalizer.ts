@@ -1,24 +1,24 @@
 import { AbstractNormalizer, NormalizerDelegate } from '../core/AbstractNormalizer';
 
-type Normalizers = 'email' | 'phone';
+type Normalizers = 'lowerCase' | 'removeSpaces';
 
 export class Normalizer extends AbstractNormalizer<Normalizers> {
     public normalizerFactory(type: Normalizers): NormalizerDelegate | void {
         switch (type) {
-            case 'phone':
-                return this.phoneNormalizer;
-            case 'email':
-                return this.emailNormalizer;
+            case 'lowerCase':
+                return this.lowerCase;
+            case 'removeSpaces':
+                return this.removeSpaces;
             default:
                 Error(`Not found Normalizer with type ${type}`);
         }
     }
 
-    private phoneNormalizer(v: string) {
-        return v;
+    private lowerCase(v: string) {
+        return v.toLowerCase();
     }
 
-    private emailNormalizer(v: string) {
-        return v;
+    private removeSpaces(v: string) {
+        return v.replace(/\s+/g, '');
     }
 }
