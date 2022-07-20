@@ -1,5 +1,8 @@
 import { FastifyServer } from './core/FastifyServer';
 import { GlobalContext, Config } from './core/types/utils';
+import { Parser } from './utils/Parser';
+import { Validator } from './utils/Validator';
+import { Normalizer } from './utils/Normalizer';
 
 // Services
 import { TemplateService } from './services/templater/TemplateService';
@@ -21,14 +24,17 @@ const config: Config = {
     defaultLang: 'ru',
 };
 
-async function globalContextFabric(): Promise<GlobalContext> {
+async function globalContextFactory(): Promise<GlobalContext> {
     return {
         templater: new TemplateService(),
         config,
+        parser: new Parser(),
+        normalizer: new Normalizer(),
+        validator: new Validator(),
     };
 }
 
-globalContextFabric()
+globalContextFactory()
     .then((g) => {
         const server = new FastifyServer(g);
 

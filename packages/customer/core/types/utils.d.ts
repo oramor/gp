@@ -4,6 +4,10 @@ import { FastifyObjects } from './libs/fastify';
 export type GlobalContext = Readonly<{
     config: Config;
     templater: TemplateService;
+    //TODO add core/abstracts/AbstractParser
+    parser: any;
+    validator: any;
+    normalizer: any;
 }>;
 
 export type LocalsObject = {
