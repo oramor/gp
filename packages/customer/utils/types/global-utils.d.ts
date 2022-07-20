@@ -1,3 +1,5 @@
 type Parsers = 'email' | 'phone';
-type Normalizers = 'email' | 'phone';
-type Validators = 'email' | 'phone';
+
+type Validators = 'string' | 'email' | 'phone';
+
+type ValidatorFunction = (v: string) => boolean;

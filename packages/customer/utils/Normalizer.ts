@@ -1,5 +1,9 @@
-export class Normalizer {
-    public normalizerFactory(type: Normalizers) {
+import { AbstractNormalizer, NormalizerDelegate } from '../core/AbstractNormalizer';
+
+type Normalizers = 'email' | 'phone';
+
+export class Normalizer extends AbstractNormalizer<Normalizers> {
+    public normalizerFactory(type: Normalizers): NormalizerDelegate | void {
         switch (type) {
             case 'phone':
                 return this.phoneNormalizer;
