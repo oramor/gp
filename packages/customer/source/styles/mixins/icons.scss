@@ -1,0 +1,12 @@
+@mixin icon($name, $height: 14px, $width: 14px) {
+    display: block;
+    height: $height;
+    width: $width;
+    @if $name == "password-eye-closed" {
+        background-image: url();
+    } @else if $name == "password-eye-opened" {
+        background-image: url();
+    } @else {
+        @error "Property #{$name} is not supported in the font-mixin mixin.";
+    }
+}
