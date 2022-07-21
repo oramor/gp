@@ -1,6 +1,6 @@
 import { AbstractParser } from '../core/AbstractParser';
 
-type Parsers = 'email';
+export type Parsers = 'email';
 
 export class Parser extends AbstractParser<Parsers> {
     public parserFactory(type: Parsers) {

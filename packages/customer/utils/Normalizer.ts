@@ -1,6 +1,6 @@
 import { AbstractNormalizer, NormalizerDelegate } from '../core/AbstractNormalizer';
 
-type Normalizers = 'lowerCase' | 'removeSpaces';
+export type Normalizers = 'lowerCase' | 'removeSpaces';
 
 export class Normalizer extends AbstractNormalizer<Normalizers> {
     public normalizerFactory(type: Normalizers): NormalizerDelegate | void {

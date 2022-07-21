@@ -1,6 +1,6 @@
 import { AbstractValidator, ValidatorDelegate } from '../core/AbstractValidator';
 
-type Validators = 'string' | 'email' | 'phone';
+export type Validators = 'string' | 'email' | 'phone' | 'password';
 
 export class Validator extends AbstractValidator<Validators> {
     public validatorFactory(type: Validators): ValidatorDelegate | void {

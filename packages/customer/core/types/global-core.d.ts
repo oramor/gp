@@ -33,3 +33,32 @@ type PlaceholdersFrom<
 type SupportedLangs = 'ru' | 'en';
 type DictionaryNode = Record<Required<SupportedLangs>, string>;
 type DictionaryObject = Record<string, DictionaryNode>;
+
+type DefaultParsers = 'email' | 'phone';
+type DefaultNormalizers = 'lowerCase' | 'removeSpaces';
+type DefailtValidators = 'default';
+
+type FormSchemaNode<P, N, V> = {
+    title: DictionaryNode;
+    errors: DictionaryNode;
+    required: boolean;
+    matching?: {
+        [key: string]: {
+            parser?: P;
+            normalizers?: N[];
+            validator?: V;
+        };
+    };
+    placeholder?: DictionaryNode;
+};
+
+type FormSchema<P = DefaultParsers, N = DefaultNormalizers, V = DefailtValidators> = Record<
+    string,
+    FormSchemaNode<P, N, V>
+>;
+
+// TODO нужно расширять от FormSchemaNode
+type FormField = {
+    value: string;
+    error?: string;
+};
