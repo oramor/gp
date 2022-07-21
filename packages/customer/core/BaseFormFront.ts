@@ -14,12 +14,11 @@ export abstract class BaseFormFront {
     protected makeObservableWrapper() {
         const regex = /^_\w*/;
 
-        type Test = {
-            //[P in Exclude<keyof this, 'toString'>]?: AnnotationMapEntry;
+        type MakeObservableOptions = {
             [key: string]: AnnotationMapEntry;
         };
 
-        const obj: Test = {
+        const obj: MakeObservableOptions = {
             isRequest: observable,
             inputUpdateAction: action,
             sendForm: action,

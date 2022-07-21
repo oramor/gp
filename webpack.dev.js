@@ -18,6 +18,7 @@ const config = {
     outputTemplatesDirName:
         env.SITE_TEMPLATE_DIR_NAME ?? new Error('Not found template dir name in .env'),
     templatesExtension: env.SITE_TEMPLATE_EXT ?? new Error('Not found templates extension in .env'),
+    templatesPostfix: 'Templ',
     chunkPostfix: 'Chunk',
     rootPath: 'current',
     indexFileName: 'index.ts',
@@ -133,14 +134,15 @@ class WebpackConfigHelper {
         const arr = [];
 
         pages.forEach((moduleName, pageName) => {
-            const outputTemplatesDirName = config.outputTemplatesDirName;
+            const outputTemplatesDirName = this.config.outputTemplatesDirName;
+            const templateFileName = pageName + this.config.templatesPostfix + '.ejs';
             /**
              * Адрес указывается относительно контекста (srcDir).
              * Точка перед путем обязательна
              */
             const templFilePath =
                 './' +
-                path.join(modulesDirName, moduleName, pagesDirName, pageName, pageName + '.ejs');
+                path.join(modulesDirName, moduleName, pagesDirName, pageName, templateFileName);
             /**
              * Адрес, по которому будет размещен файл. Указывается
              * относительно outDir. Здесь точка уже не нужна

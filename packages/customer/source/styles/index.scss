@@ -2,6 +2,13 @@
 @use "../styles/libs/reset.scss";
 @use "../styles/libs/colors.scss";
 
+// Components
+@use "../components/components.scss";
+
+// Modules
+@use "../../modules/profile/modules-profile.scss";
+@use "../../modules/site/modules-site.scss";
+
 // Mixins
 @use "../styles/mixins/font.scss";
 @use "../styles/mixins/link.scss";
@@ -9,8 +16,5 @@
 @use "../styles/mixins/logo.scss";
 @use "../styles/mixins/icons.scss";
 
-// Pages
-@use "../../modules/site/pages/MainPage/MainPage.scss";
-
-// Blocks
+// HTML-blocks
 @use "../blocks/FooterBlock/FooterBlock.scss";
