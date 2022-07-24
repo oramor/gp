@@ -3,13 +3,32 @@ import { MakeObservableOptions } from '../core/types/libs/mobx';
 import { ReactHandlers, ReactEvents } from './types/libs/react';
 
 type BaseFormFrontConstructor = new (lang: SupportedLangs) => BaseFormFront;
+interface IInvalidFormResponse {
+    topError?: string;
+    fieldErrors?: Array<{
+        name: string;
+        message: string;
+    }>;
+}
 
 export abstract class BaseFormFront {
     [key: string]: any;
     protected lang: SupportedLangs;
     public isRequest = false;
+    public isInvalid = false;
+    public topError = '';
+
+    /**
+     * Observable fields should begin with "_" (for ex. _login)
+     */
+    private computedFieldNameMask = /^_\w*/;
+
     constructor(...args: ConstructorParameters<BaseFormFrontConstructor>) {
         this.lang = args[0];
+    }
+
+    private getObservableName(fieldName: string) {
+        return '_' + fieldName;
     }
 
     protected makeObservableWrapper() {
@@ -17,10 +36,12 @@ export abstract class BaseFormFront {
 
         const obj: MakeObservableOptions = {
             isRequest: observable,
+            isInvalid: observable,
+            topError: observable,
             inputUpdateAction: action,
             sendForm: action,
-            setRequestOff: action,
-            setRequestOn: action,
+            setErrors: action,
+            removeErrors: action,
         };
 
         /**
@@ -74,18 +95,16 @@ export abstract class BaseFormFront {
 
     public inputUpdateAction(name: string, ev: ReactEvents.InputUpdateEvent) {
         const value: string = ev.target.value;
-        const stateName = '_' + name;
-        this[stateName]['value'] = value;
+        const oName = this.getObservableName(name);
+        this[oName]['value'] = value;
     }
 
     private get formData() {
         const formData = new FormData();
 
-        // Fields should begin with "_" (for ex. _login)
-        const regex = /^_\w*/;
-
         Object.keys(this).forEach((str) => {
-            if (regex.test(str)) {
+            if (this.computedFieldNameMask.test(str)) {
+                // Removing '_' for get computed name
                 const name = str.slice(1);
                 const value = this[str]['value'];
                 formData.set(name, value);
@@ -97,15 +116,43 @@ export abstract class BaseFormFront {
 
     // TODO
     public sendForm() {
-        this.setRequestOn();
-        console.log(this.formData.get('login'));
-    }
-
-    public setRequestOff() {
-        this.isRequest = false;
-    }
-
-    public setRequestOn() {
+        // Mark form as loading
         this.isRequest = true;
+
+        //console.log(this.formData.get('login'));
+
+        const rs = Promise.resolve({
+            topError: 'Test',
+            fieldErros: [{ name: 'login', message: `test message: ${Math.random}` }],
+        });
+
+        rs.then((obj: IInvalidFormResponse) => this.setErrors(obj));
+    }
+
+    private removeErrors() {
+        if (this.topError) {
+            this.topError = '';
+        }
+
+        Object.keys(this).forEach((cName) => {
+            if (this.computedFieldNameMask.test(cName)) {
+                this[cName]['error'] = '';
+            }
+        });
+    }
+
+    private setErrors(obj: IInvalidFormResponse) {
+        if (this.isInvalid) {
+            this.removeErrors();
+        }
+
+        if (obj.topError) {
+            this.topError = obj.topError;
+        }
+
+        obj.fieldErrors?.forEach((item) => {
+            const oName = this.getObservableName(item.name);
+            this[oName]['error'] = item.message;
+        });
     }
 }

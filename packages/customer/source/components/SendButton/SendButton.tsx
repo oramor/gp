@@ -1,12 +1,13 @@
 type SendButtonProps = {
     title: string;
+    isRequested: boolean;
     onClick?: () => void;
 };
 
-export function SendButton({ onClick, title }: SendButtonProps) {
+export function SendButton({ onClick, isRequested, title }: SendButtonProps) {
     return (
         <button type="button" onClick={onClick}>
-            {title}
+            {isRequested ? title : 'Loading...'}
         </button>
     );
 }

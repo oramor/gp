@@ -4,11 +4,14 @@ type InputTextProps = FormFieldComputed & {
     onChange?: ReactHandlers.InputChangeHandler;
 };
 
-export function InputText({ title, placeholder, onChange }: InputTextProps) {
+export function InputText({ title, placeholder, error, onChange }: InputTextProps) {
     return (
-        <label>
-            <span>{title}</span>
-            <input type="text" placeholder={placeholder} onChange={onChange} />
-        </label>
+        <div>
+            <label>
+                <span>{title}</span>
+                <input type="text" placeholder={placeholder} onChange={onChange} />
+            </label>
+            {error && <div>error</div>}
+        </div>
     );
 }

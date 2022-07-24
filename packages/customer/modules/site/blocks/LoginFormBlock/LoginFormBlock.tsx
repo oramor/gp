@@ -1,4 +1,4 @@
-import { LoginForm } from '../../forms/LoginForm/LoginForm';
+import { LoginForm } from '../../../profile/forms/LoginForm/LoginForm';
 
 export function LoginFormBlock() {
     return (
