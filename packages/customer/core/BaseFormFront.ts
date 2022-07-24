@@ -45,8 +45,12 @@ export abstract class BaseFormFront {
         );
     }
 
-    protected computeField(fieldSchema: FormFieldSchema): FormFieldComputed {
+    protected computeField<T extends string>(
+        fieldSchema: FormFieldSchema,
+        fieldName: T,
+    ): FormFieldComputed {
         const obj: FormFieldComputed = {
+            name: fieldName,
             title: fieldSchema.title[this.lang],
             value: fieldSchema.value,
             required: fieldSchema.required,
@@ -60,7 +64,7 @@ export abstract class BaseFormFront {
         return obj;
     }
 
-    public inputUpdateFactory(fieldName: string): ReactHandlers.InputUpdateHandler {
+    public inputUpdateFactory(fieldName: string): ReactHandlers.InputChangeHandler {
         if (Object.keys(this).includes(fieldName)) {
             throw new Error(`Not found Field ${fieldName}`);
         }
@@ -70,7 +74,8 @@ export abstract class BaseFormFront {
 
     public inputUpdateAction(name: string, ev: ReactEvents.InputUpdateEvent) {
         const value: string = ev.target.value;
-        this[name]['value'] = value;
+        const stateName = '_' + name;
+        this[stateName]['value'] = value;
     }
 
     private get formData() {

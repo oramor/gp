@@ -2,7 +2,9 @@ import { Parsers } from '../../../../utils/Parser';
 import { Normalizers } from '../../../../utils/Normalizer';
 import { Validators } from '../../../../utils/Validator';
 
-export const LoginFormSchema: FormSchema<Parsers, Normalizers, Validators> = {
+export type LoginFormFields = 'login' | 'password';
+
+export const LoginFormSchema: FormSchema<LoginFormFields, Parsers, Normalizers, Validators> = {
     login: {
         title: {
             ru: 'Логин',

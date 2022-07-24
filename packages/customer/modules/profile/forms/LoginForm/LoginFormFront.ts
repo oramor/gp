@@ -1,5 +1,5 @@
 import { BaseFormFront } from '../../../../core/BaseFormFront';
-import { LoginFormSchema } from './LoginFormSchema';
+import { LoginFormSchema, LoginFormFields } from './LoginFormSchema';
 
 export class LoginFormFront extends BaseFormFront {
     _login: FormFieldSchema = {
@@ -20,10 +20,10 @@ export class LoginFormFront extends BaseFormFront {
     }
 
     get login() {
-        return this.computeField(this._login);
+        return this.computeField<LoginFormFields>(this._login, 'login');
     }
 
     get password() {
-        return this.computeField(this._password);
+        return this.computeField<LoginFormFields>(this._password, 'password');
     }
 }

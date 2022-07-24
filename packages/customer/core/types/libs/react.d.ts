@@ -5,5 +5,5 @@ export namespace ReactEvents {
 }
 
 export namespace ReactHandlers {
-    export type InputUpdateHandler = (ev: ReactEvents.InputUpdateEvent) => void;
+    export type InputChangeHandler = (ev: React.FocusEvent<HTMLInputElement>) => void;
 }

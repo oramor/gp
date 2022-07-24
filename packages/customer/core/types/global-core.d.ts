@@ -52,10 +52,12 @@ type FormSchemaNode<P, N, V> = {
     placeholder?: DictionaryNode;
 };
 
-type FormSchema<P = DefaultParsers, N = DefaultNormalizers, V = DefailtValidators> = Record<
-    string,
-    FormSchemaNode<P, N, V>
->;
+type FormSchema<
+    F extends string,
+    P = DefaultParsers,
+    N = DefaultNormalizers,
+    V = DefailtValidators,
+> = Record<F, FormSchemaNode<P, N, V>>;
 
 // TODO нужно расширять от FormSchemaNode
 type FormField = {
@@ -81,6 +83,7 @@ type FormFieldSchema = {
  * Вычисляется на основании схемы
  */
 type FormFieldComputed = {
+    name: string;
     value: string | number;
     title: string;
     required: boolean;
