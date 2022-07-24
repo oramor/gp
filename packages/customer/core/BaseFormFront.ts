@@ -64,7 +64,7 @@ export abstract class BaseFormFront {
         return obj;
     }
 
-    public inputUpdateFactory(fieldName: string): ReactHandlers.InputChangeHandler {
+    public inputUpdateFactory<T extends string>(fieldName: T): ReactHandlers.InputChangeHandler {
         if (Object.keys(this).includes(fieldName)) {
             throw new Error(`Not found Field ${fieldName}`);
         }
