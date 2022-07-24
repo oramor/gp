@@ -62,3 +62,28 @@ type FormField = {
     value: string;
     error?: string;
 };
+
+/**
+ * Объект, который содержит описание поля из схемы
+ */
+// TODO сделать на основе FormSchemaNode (решить вопрос с парсерами)
+type FormFieldSchema = {
+    value: string | number;
+    title: DictionaryNode;
+    errors: DictionaryNode;
+    error: string; // computed error
+    required: boolean;
+    placeholder?: DictionaryNode;
+};
+
+/**
+ * Объект, который содержит описание поля для компонентов.
+ * Вычисляется на основании схемы
+ */
+type FormFieldComputed = {
+    value: string | number;
+    title: string;
+    required: boolean;
+    placeholder?: string;
+    error?: string;
+};

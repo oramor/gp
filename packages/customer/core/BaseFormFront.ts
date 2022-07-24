@@ -1,4 +1,5 @@
-import { makeObservable, action, observable, computed, AnnotationMapEntry } from 'mobx';
+import { makeObservable, action, observable, computed } from 'mobx';
+import { MakeObservableOptions } from '../core/types/libs/mobx';
 import { ReactHandlers, ReactEvents } from './types/libs/react';
 
 type BaseFormFrontConstructor = new (lang: SupportedLangs) => BaseFormFront;
@@ -13,10 +14,6 @@ export abstract class BaseFormFront {
 
     protected makeObservableWrapper() {
         const regex = /^_\w*/;
-
-        type MakeObservableOptions = {
-            [key: string]: AnnotationMapEntry;
-        };
 
         const obj: MakeObservableOptions = {
             isRequest: observable,
@@ -44,8 +41,23 @@ export abstract class BaseFormFront {
         makeObservable(
             this,
             // TODO разобраться с типом этого объекта
-            obj as { [P in Exclude<keyof this, 'toString'>]?: AnnotationMapEntry },
+            obj as MakeObservableOptions<this>,
         );
+    }
+
+    protected computeField(fieldSchema: FormFieldSchema): FormFieldComputed {
+        const obj: FormFieldComputed = {
+            title: fieldSchema.title[this.lang],
+            value: fieldSchema.value,
+            required: fieldSchema.required,
+            error: fieldSchema.error,
+        };
+
+        if (fieldSchema.placeholder) {
+            obj.placeholder = fieldSchema.placeholder[this.lang];
+        }
+
+        return obj;
     }
 
     public inputUpdateFactory(fieldName: string): ReactHandlers.InputUpdateHandler {
