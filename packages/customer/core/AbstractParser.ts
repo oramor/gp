@@ -3,8 +3,8 @@
  * Пока парсеры могут принимать только строки
  */
 
-export type ParserDelegate = (v: string) => boolean;
+export type ParserDelegate = (v: string | number) => boolean;
 
 export abstract class AbstractParser {
-    abstract parserFactory(type: Parsers): ParserDelegate | void;
+    abstract parserFactory(type: Parsers): ParserDelegate;
 }

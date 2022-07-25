@@ -2,13 +2,13 @@ import { BaseFormFront } from '../../../../core/BaseFormFront';
 import { LoginFormSchema, LoginFormFields } from './LoginFormSchema';
 
 export class LoginFormFront extends BaseFormFront {
-    _login: FormFieldSchema = {
+    _login: FormFieldState = {
         ...LoginFormSchema['login'],
         value: '',
         error: '',
     };
 
-    _password: FormFieldSchema = {
+    _password: FormFieldState = {
         ...LoginFormSchema['password'],
         value: '',
         error: '',

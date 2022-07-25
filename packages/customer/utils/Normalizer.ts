@@ -12,11 +12,17 @@ export class Normalizer extends AbstractNormalizer {
         }
     }
 
-    private lowerCase(v: string) {
-        return v.toLowerCase();
+    private lowerCase(v: string | number) {
+        if (typeof v === 'string') {
+            return v.toLowerCase();
+        }
+        return v;
     }
 
-    private removeSpaces(v: string) {
-        return v.replace(/\s+/g, '');
+    private removeSpaces(v: string | number) {
+        if (typeof v === 'string') {
+            return v.replace(/\s+/g, '');
+        }
+        return v;
     }
 }

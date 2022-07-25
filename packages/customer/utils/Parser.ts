@@ -10,7 +10,11 @@ export class Parser extends AbstractParser {
         }
     }
 
-    emailParser(v: string) {
+    emailParser(v: string | number) {
+        if (typeof v !== 'string') {
+            return false;
+        }
+
         const regex = /@/;
         if (regex.test(v)) return true;
         return false;

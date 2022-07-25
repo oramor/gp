@@ -34,11 +34,26 @@ type SupportedLangs = 'ru' | 'en';
 type DictionaryNode = Record<Required<SupportedLangs>, string>;
 type DictionaryObject = Record<string, DictionaryNode>;
 
+// type FormSchemaNodeWithoutMatching = {
+//     normalizers?: Normalizers[];
+//     validator?: Validators;
+// };
+
+// type FormSchemaNodeWithMatching = {
+//     matching: {
+//         [key: string]: {
+//             parser: Parsers;
+//             normalizers?: Normalizers[];
+//             validator?: Validators;
+//         };
+//     };
+// };
+
 type FormSchemaNode = {
     title: DictionaryNode;
     errors: DictionaryNode;
     required: boolean;
-    matching?: {
+    matching: {
         [key: string]: {
             parser?: Parsers;
             normalizers?: Normalizers[];
@@ -50,17 +65,11 @@ type FormSchemaNode = {
 
 type FormSchema<T extends FormSchemaFields> = Record<T, FormSchemaNode>;
 
-// TODO нужно расширять от FormSchemaNode
-type FormField = {
-    value: string;
-    error?: string;
-};
-
 /**
- * Объект, который содержит описание поля из схемы
+ * Объект, который хранит стейт поля формы
  */
 // TODO сделать на основе FormSchemaNode (решить вопрос с парсерами)
-type FormSchemaFieldNode = {
+type FormFieldState = {
     value: string | number;
     title: DictionaryNode;
     errors: DictionaryNode;
