@@ -69,7 +69,7 @@ export abstract class BaseFormFront {
     }
 
     protected computeField<T extends string>(
-        fieldSchema: FormFieldSchema,
+        fieldSchema: FormSchemaFieldNode,
         fieldName: T,
     ): FormFieldComputed {
         const obj: FormFieldComputed = {

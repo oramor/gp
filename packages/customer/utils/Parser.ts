@@ -1,8 +1,6 @@
 import { AbstractParser } from '../core/AbstractParser';
 
-export type Parsers = 'email';
-
-export class Parser extends AbstractParser<Parsers> {
+export class Parser extends AbstractParser {
     public parserFactory(type: Parsers) {
         switch (type) {
             case 'email':

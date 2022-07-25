@@ -1,14 +1,12 @@
-import { AbstractValidator, ValidatorDelegate } from '../core/AbstractValidator';
+import { AbstractValidator } from '../core/AbstractValidator';
 
-export type Validators = 'string' | 'email' | 'phone' | 'password';
-
-export class Validator extends AbstractValidator<Validators> {
-    public validatorFactory(type: Validators): ValidatorDelegate | void {
+export class Validator extends AbstractValidator {
+    public validatorFactory(type: Validators) {
         switch (type) {
             case 'string':
                 return this.isString;
             default:
-                Error(`Not found validator with type ${type}`);
+                throw Error(`Not found validator with type ${type}`);
         }
     }
 

@@ -1,6 +1,10 @@
-// Парсер тестирует значение и возвращает true, если оно соответствует
-export type ParserDelegate<T extends string = DefaultParsers> = (v: T) => boolean;
+/**
+ * Парсер тестирует значение и возвращает true, если оно соответствует.
+ * Пока парсеры могут принимать только строки
+ */
 
-export abstract class AbstractParser<T = DefaultParsers> {
-    abstract parserFactory(type: T): ParserDelegate | void;
+export type ParserDelegate = (v: string) => boolean;
+
+export abstract class AbstractParser {
+    abstract parserFactory(type: Parsers): ParserDelegate | void;
 }

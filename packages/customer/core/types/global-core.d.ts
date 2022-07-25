@@ -34,30 +34,21 @@ type SupportedLangs = 'ru' | 'en';
 type DictionaryNode = Record<Required<SupportedLangs>, string>;
 type DictionaryObject = Record<string, DictionaryNode>;
 
-type DefaultParsers = 'email' | 'phone';
-type DefaultNormalizers = 'lowerCase' | 'removeSpaces';
-type DefailtValidators = 'default';
-
-type FormSchemaNode<P, N, V> = {
+type FormSchemaNode = {
     title: DictionaryNode;
     errors: DictionaryNode;
     required: boolean;
     matching?: {
         [key: string]: {
-            parser?: P;
-            normalizers?: N[];
-            validator?: V;
+            parser?: Parsers;
+            normalizers?: Normalizers[];
+            validator?: Validators;
         };
     };
     placeholder?: DictionaryNode;
 };
 
-type FormSchema<
-    F extends string,
-    P = DefaultParsers,
-    N = DefaultNormalizers,
-    V = DefailtValidators,
-> = Record<F, FormSchemaNode<P, N, V>>;
+type FormSchema<T extends FormSchemaFields> = Record<T, FormSchemaNode>;
 
 // TODO нужно расширять от FormSchemaNode
 type FormField = {
@@ -69,7 +60,7 @@ type FormField = {
  * Объект, который содержит описание поля из схемы
  */
 // TODO сделать на основе FormSchemaNode (решить вопрос с парсерами)
-type FormFieldSchema = {
+type FormSchemaFieldNode = {
     value: string | number;
     title: DictionaryNode;
     errors: DictionaryNode;
@@ -90,3 +81,9 @@ type FormFieldComputed = {
     placeholder?: string;
     error?: string;
 };
+
+/**
+ * Для каждой формы создается перечисление computed-полей, от которых
+ * зависит схема и классы BaseFormServ, BaseFormFront
+ */
+type FormSchemaFields = string;

@@ -1,16 +1,14 @@
-import { AbstractNormalizer, NormalizerDelegate } from '../core/AbstractNormalizer';
+import { AbstractNormalizer } from '../core/AbstractNormalizer';
 
-export type Normalizers = 'lowerCase' | 'removeSpaces';
-
-export class Normalizer extends AbstractNormalizer<Normalizers> {
-    public normalizerFactory(type: Normalizers): NormalizerDelegate | void {
+export class Normalizer extends AbstractNormalizer {
+    public normalizerFactory(type: Normalizers) {
         switch (type) {
             case 'lowerCase':
                 return this.lowerCase;
             case 'removeSpaces':
                 return this.removeSpaces;
             default:
-                Error(`Not found Normalizer with type ${type}`);
+                throw Error(`Not found Normalizer with type ${type}`);
         }
     }
 

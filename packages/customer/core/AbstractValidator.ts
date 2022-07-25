@@ -1,5 +1,5 @@
-export type ValidatorDelegate<T extends string = DefailtValidators> = (v: T) => boolean;
+export type ValidatorDelegate = (v: any) => boolean;
 
-export abstract class AbstractValidator<T = DefailtValidators> {
-    abstract validatorFactory(v: T): ValidatorDelegate | void;
+export abstract class AbstractValidator {
+    abstract validatorFactory(v: Validators): ValidatorDelegate | void;
 }
