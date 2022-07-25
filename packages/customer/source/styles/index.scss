@@ -1,6 +1,6 @@
 // Libs
-@use "../styles/libs/reset.scss";
-@use "../styles/libs/colors.scss";
+@use "./libs/reset.scss";
+@use "./libs/colors.scss";
 
 // Components
 @use "../components/components.scss";
@@ -10,11 +10,11 @@
 @use "../../modules/site/modules-site.scss";
 
 // Mixins
-@use "../styles/mixins/font.scss";
-@use "../styles/mixins/link.scss";
-@use "../styles/mixins/screen.scss";
-@use "../styles/mixins/logo.scss";
-@use "../styles/mixins/icons.scss";
+@use "./mixins/font.scss";
+@use "./mixins/link.scss";
+@use "./mixins/screen.scss";
+@use "./mixins/logo.scss";
+@use "./mixins/icons.scss";
 
 // HTML-blocks
 @use "../blocks/FooterBlock/FooterBlock.scss";

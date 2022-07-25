@@ -11,7 +11,7 @@ export function InputPassword({ title, error, onChange }: InputPasswordProps) {
                 <span>{title}</span>
                 <input type="password" onChange={onChange} />
             </label>
-            {error && <div>error</div>}
+            {error && <div>{error}</div>}
         </div>
     );
 }

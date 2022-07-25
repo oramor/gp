@@ -8,7 +8,7 @@ export class Parser extends AbstractParser<Parsers> {
             case 'email':
                 return this.emailParser;
             default:
-                Error(`Not found Normalizer with type ${type}`);
+                throw Error(`Not found Normalizer with type ${type}`);
         }
     }
 

@@ -1,8 +1,8 @@
 // Libs
-@forward "./libs/colors.scss";
+@forward "./packages/customer/source/styles/libs/colors.scss";
 
 // Mixins
-@forward "./mixins/screen.scss";
-@forward "./mixins/font.scss";
-@forward "./mixins/link.scss";
-@forward "./mixins/icons.scss";
+@forward "./packages/customer/source/styles/mixins/screen.scss";
+@forward "./packages/customer/source/styles/mixins/font.scss";
+@forward "./packages/customer/source/styles/mixins/link.scss";
+@forward "./packages/customer/source/styles/mixins/icons.scss";

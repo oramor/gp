@@ -7,7 +7,7 @@ type SendButtonProps = {
 export function SendButton({ onClick, isRequested, title }: SendButtonProps) {
     return (
         <button type="button" onClick={onClick}>
-            {isRequested ? title : 'Loading...'}
+            {isRequested ? 'Loading...' : title}
         </button>
     );
 }

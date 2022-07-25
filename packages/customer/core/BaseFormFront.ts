@@ -16,6 +16,7 @@ export abstract class BaseFormFront {
     protected lang: SupportedLangs;
     public isRequest = false;
     public isInvalid = false;
+    public invalidFields: string[] = [];
     public topError = '';
 
     /**
@@ -40,8 +41,9 @@ export abstract class BaseFormFront {
             topError: observable,
             inputUpdateAction: action,
             sendForm: action,
-            setErrors: action,
-            removeErrors: action,
+            updateFieldErrorAction: action,
+            updateTopErrorAction: action,
+            isRequestAction: action,
         };
 
         /**
@@ -114,45 +116,73 @@ export abstract class BaseFormFront {
         return formData;
     }
 
+    public isRequestAction(b: boolean) {
+        if (b) {
+            this.isRequest = true;
+        } else {
+            this.isRequest = false;
+        }
+    }
+
     // TODO
     public sendForm() {
         // Mark form as loading
-        this.isRequest = true;
+        this.isRequestAction(true);
 
         //console.log(this.formData.get('login'));
 
-        const rs = Promise.resolve({
+        const obj = {
             topError: 'Test',
-            fieldErros: [{ name: 'login', message: `test message: ${Math.random}` }],
+            fieldErrors: [{ name: 'login', message: `test message: ${Math.random()}` }],
+        };
+
+        const rs = new Promise((resolve) => {
+            console.log('start promise');
+            setTimeout(() => resolve(obj), 1000);
         });
 
-        rs.then((obj: IInvalidFormResponse) => this.setErrors(obj));
+        rs.then((obj) => {
+            this.setErrors(obj as IInvalidFormResponse);
+            console.log('end promise');
+            this.isRequestAction(false);
+        });
     }
 
-    private removeErrors() {
+    public removeErrors() {
         if (this.topError) {
-            this.topError = '';
+            this.updateTopErrorAction('');
         }
 
-        Object.keys(this).forEach((cName) => {
-            if (this.computedFieldNameMask.test(cName)) {
-                this[cName]['error'] = '';
-            }
+        this.invalidFields.forEach((fieldName) => {
+            this.updateFieldErrorAction(fieldName, '');
         });
     }
 
-    private setErrors(obj: IInvalidFormResponse) {
+    public setErrors(obj: IInvalidFormResponse) {
+        console.log('---stat set errors');
+        console.log(obj);
         if (this.isInvalid) {
             this.removeErrors();
         }
 
         if (obj.topError) {
-            this.topError = obj.topError;
+            this.updateTopErrorAction(obj.topError);
         }
 
         obj.fieldErrors?.forEach((item) => {
-            const oName = this.getObservableName(item.name);
-            this[oName]['error'] = item.message;
+            this.updateFieldErrorAction(item.name, item.message);
+            this.invalidFields.push(item.name);
         });
+
+        console.log(this.invalidFields);
+    }
+
+    public updateFieldErrorAction(fieldName: string, message: string) {
+        const oName = this.getObservableName(fieldName);
+        this[oName]['error'] = message;
+    }
+
+    public updateTopErrorAction(message: string) {
+        this.topError = message;
     }
 }

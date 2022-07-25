@@ -14,8 +14,12 @@ export const LoginForm = observer(() => {
     return (
         <form>
             <InputText {...form.login} onChange={onChangeLoginHandler} />
-            <InputPassword {...form.login} onChange={onChangePasswordHandler} />
-            <SendButton title="Отправить" onClick={form.sendForm} isRequested={form.isRequest} />
+            <InputPassword {...form.password} onChange={onChangePasswordHandler} />
+            <SendButton
+                title="Отправить"
+                onClick={form.sendForm.bind(form)}
+                isRequested={form.isRequest}
+            />
         </form>
     );
 });

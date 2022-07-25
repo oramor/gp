@@ -11,7 +11,7 @@ export function InputText({ title, placeholder, error, onChange }: InputTextProp
                 <span>{title}</span>
                 <input type="text" placeholder={placeholder} onChange={onChange} />
             </label>
-            {error && <div>error</div>}
+            {error && <div>{error}</div>}
         </div>
     );
 }
