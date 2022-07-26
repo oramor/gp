@@ -9,7 +9,13 @@ export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaF
     abstract schema: FormSchema<Fields>;
     protected g: GlobalContext;
     protected ctx: ActionContextForm<Fields>;
-    private outputFields: Record<string, string> = {};
+
+    /**
+     * Это поля, которые  доступны при работе с объектом формы
+     * на стороне сервера (form.firstName). Названия некоторых
+     * полей на бекенды может отличаться от их названия на фронте
+     */
+    private validFields: Record<string, string> = {};
     private fieldErrors: Record<string, string> = {};
     constructor(...args: ConstructorParameters<FormConstructor>) {
         this.g = args[0];
@@ -17,33 +23,48 @@ export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaF
     }
 
     get fields() {
-        return this.outputFields;
+        return this.validFields;
     }
 
-    addField(outputFieldName: string, v: any) {
-        this.outputFields[outputFieldName] = v;
+    addValidField(outputFieldName: string, v: any) {
+        this.validFields[outputFieldName] = v;
     }
 
     addFieldError(fieldName: Fields, message: string) {
         this.fieldErrors[fieldName] = message;
     }
 
-    get requredErrorMessage() {
+    requiredReport(fieldName: Fields) {
         const messages: DictionaryNode = {
             ru: 'Это поле необходимо заполнить',
             en: 'This field is required',
         };
         const lang = this.ctx.lang;
-        return messages[lang];
+        this.addFieldError(fieldName, messages[lang]);
     }
 
-    get notMatchedErrorMessage() {
+    notValidatedReport(fieldName: Fields) {
+        const errors = this['schema'][fieldName]['errors'];
+        const lang = this.ctx.lang;
+        this.addFieldError(fieldName, errors[lang]);
+    }
+
+    notMatchingRulesReport(fieldName: Fields) {
+        const messages: DictionaryNode = {
+            ru: 'Найдено правил обработки для данного поля',
+            en: 'Not found matching rules for this field',
+        };
+        const lang = this.ctx.lang;
+        this.addFieldError(fieldName, messages[lang]);
+    }
+
+    notMatchedReport(fieldName: Fields) {
         const messages: DictionaryNode = {
             ru: 'Не удалось распознать значение в этом поле',
             en: 'This field does not matched',
         };
         const lang = this.ctx.lang;
-        return messages[lang];
+        this.addFieldError(fieldName, messages[lang]);
     }
 
     notFoundInSchemaReport(fieldName: Fields) {
@@ -57,20 +78,20 @@ export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaF
 
     notFoundInBodyReport(fieldName: Fields) {
         const messages: DictionaryNode = {
-            ru: 'Значение ожидалось, но не передано клиентом',
+            ru: 'Значение ожидалось, но не получено от клиента',
             en: 'This value did not got from client',
         };
         const lang = this.ctx.lang;
         this.addFieldError(fieldName, messages[lang]);
     }
 
-    getValidatorErrorMessage(rule: FormSchemaNode) {
-        const lang = this.ctx.lang;
-        return rule.errors[lang];
-    }
-
     protected make() {
-        main: for (const fieldName in this.ctx.body) {
+        const body = this.ctx.body;
+        if (!body) {
+            throw Error('Not found body');
+        }
+
+        main: for (const fieldName in body) {
             const rule = this.schema[fieldName];
 
             if (!rule) {
@@ -78,7 +99,7 @@ export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaF
                 continue;
             }
 
-            const { value } = this.ctx.body[fieldName];
+            const { value } = body[fieldName];
             if (!value) {
                 this.notFoundInBodyReport(fieldName);
                 continue;
@@ -88,68 +109,41 @@ export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaF
              * Required test
              */
             if (rule.required && value === '') {
-                this.addFieldError(fieldName, this.requredErrorMessage);
+                this.requiredReport(fieldName);
+                continue;
+            }
+
+            /**
+             * Объект с матчингами для данного поля
+             */
+            const matchingRules = rule.matching;
+            if (!matchingRules) {
+                this.notMatchingRulesReport(fieldName);
                 continue;
             }
 
             /**
              * Начальный стейт: поле считается не подошедшим,
-             * пока не один матчинг не сработал
+             * пока ни один матчинг не сработал
              */
             let isMatched = false;
+
+            /**
+             * Открываем счет попыток матчинга. Число попыток равно
+             * количеству правил матчинга для данного поля
+             */
+            let counter = Object.keys(matchingRules).length;
 
             /**
              * Имя поля, полученное от клиента, может отличаться от имени,
              * которое используется на сервере и в БД. Кроме того, одному
              * полю на клиенте может соответствовать несколько вариантов
              */
-            for (const outputFieldName in rule.matching) {
-                /**
-                 * Открываем счет полей матчинга. Если ни один из матчингов
-                 * не сработает, следует вернуть ошибку валидации
-                 */
-                let counter = Object.keys(rule.matching).length;
-
-                /**
-                 * Последовательно применяет нормалайзеры, модифицируя
-                 * полученное от клиента значение поля
-                 */
-                const normalize = () => {
-                    const normalizers = rule.matching[outputFieldName].normalizers;
-                    if (normalizers) {
-                        normalizers.reduce((acc, normalizerType) => {
-                            const normalizer = this.g.normalizer.normalizerFactory(normalizerType);
-                            return normalizer(acc);
-                        }, value);
-                    }
-                };
-
-                /**
-                 * Применяет валадицию нормализованного значения. Специального
-                 * контроля нет, просто нужно иметь в виду, что валидатор
-                 * следует вызывать после нормализатора
-                 */
-                const validate = () => {
-                    const validatorType = rule.matching[outputFieldName].validator;
-                    if (validatorType) {
-                        const validator = this.g.validator.validatorFactory(validatorType);
-                        if (validator(value)) {
-                            this.addField(outputFieldName, value);
-                        }
-
-                        /**
-                         * Возвращается именно fieldName, а не outputFieldName,
-                         * т.е. клиентское имя поля, а не серверное
-                         */
-                        const errMessage = this.getValidatorErrorMessage(rule);
-                        this.addFieldError(fieldName, errMessage);
-                    }
-                };
-
+            for (const outputFieldName in matchingRules) {
                 /**
                  * Пробуем получить код парсера для данного матчинга
                  */
-                const parserType = rule.matching[outputFieldName].parser;
+                const parserType = matchingRules[outputFieldName]['parser'];
                 if (parserType) {
                     const parser = this.g.parser.parserFactory(parserType);
                     isMatched = parser(value);
@@ -162,35 +156,65 @@ export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaF
                 }
 
                 /**
-                 * Если парсер найден, но не подходит, переходим к следующему
-                 * полю матчинга, уменьшая счетчик
+                 * Если матчинги для данного поля закончились, а ни один
+                 * парсер не сработал, добавляем поле в ошибки, уменьшаем
+                 * счетчик и переходим к следующему
                  */
                 if (!isMatched) {
                     counter--;
 
                     /**
-                     * Если матчинги для данного поля закончились, а ни один
-                     * парсер не сработал, добавляем поле в ошибки
-                     * и переходим к следующему
+                     * Если матчинги закончились, переходим к следующему
+                     * полю, добавляя текущее в ошибки
                      */
                     if (counter === 0) {
-                        this.addFieldError(fieldName, this.notMatchedErrorMessage);
+                        this.notMatchedReport(fieldName);
                         continue main;
                     }
                     continue;
                 }
 
                 /**
-                 * Раз текущий матчинг подошел для значения, выполняем
-                 * нормализацию и валидацию
+                 * Раз текущий матчинг подошел, переходим к нормализации,
+                 * последовательно применяя нормалайзеры, которые модифицируют
+                 * значение, полученное от клиента
                  */
-                normalize();
+                const normalizers = matchingRules[outputFieldName]['normalizers'];
+                if (normalizers) {
+                    normalizers.reduce((acc, normalizerType) => {
+                        const normalizer = this.g.normalizer.normalizerFactory(normalizerType);
+                        return normalizer(acc);
+                    }, value);
+                }
 
-                /**
-                 * Если валидация не прошла, уменьшаем счетчик с пометкой,
-                 * что поле не валидно для данного парсера
-                 */
-                validate();
+                const validatorType = rule.matching[outputFieldName]['validator'];
+                if (validatorType) {
+                    const validator = this.g.validator.validatorFactory(validatorType);
+                    if (validator(value)) {
+                        this.addValidField(outputFieldName, value);
+                        continue main;
+                    }
+
+                    /**
+                     * Уменьшаем счетчик попыток матчинга, т.к. по итогу,
+                     * не смотря на валиднось парсеру, валидация провалилась.
+                     */
+                    counter--;
+
+                    if (counter === 0) {
+                        /**
+                         * Если матчинги для данного поля закончились, текущее
+                         * поле добавляется в список не валидных и начинается
+                         * обработка следующего
+                         */
+                        this.notValidatedReport(fieldName);
+                    }
+                } else {
+                    /**
+                     * При отсутствии валидатора значение считается валидным
+                     */
+                    this.addValidField(outputFieldName, value);
+                }
             }
         }
     }

@@ -55,7 +55,7 @@ type FormSchemaNode = {
     required: boolean;
     matching: {
         [key: string]: {
-            parser: Parsers;
+            parser?: Parsers;
             normalizers?: Normalizers[];
             validator?: Validators;
         };
