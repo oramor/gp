@@ -18,6 +18,7 @@ const config: Config = {
     host: '0.0.0.0',
     domain: 'localhost',
     baseUrl: 'http://localhost',
+    baseApiGateway: 'http://localhost',
     templatesDir:
         process.env['SITE_TEMPLATE_DIR'] ?? '/home/romaro/gp/packages/customer/_public/views',
     templatesExtension: process.env['SITE_TEMPLATES_EXT'] ?? 'hbs',

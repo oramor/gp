@@ -28,6 +28,7 @@ export type Config = Readonly<{
     host: string;
     domain: string;
     baseUrl: string;
+    baseApiGateway: string;
     templatesDir: string;
     templatesExtension: string;
     defaultLang: SupportedLangs;
