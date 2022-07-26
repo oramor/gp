@@ -34,6 +34,7 @@ export const LoginFormSchema: FormSchema<LoginFormFields> = {
         },
         matching: {
             password: {
+                parser: 'default',
                 validator: 'password',
             },
         },

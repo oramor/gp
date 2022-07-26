@@ -3,5 +3,5 @@
  * могут меняться в зависимости от реализации.
  */
 type Normalizers = 'lowerCase' | 'removeSpaces';
-type Parsers = 'email';
+type Parsers = 'default' | 'email';
 type Validators = 'string' | 'email' | 'phone' | 'password';
