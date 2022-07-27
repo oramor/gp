@@ -2,7 +2,6 @@ import { makeObservable, action, observable, computed } from 'mobx';
 import { MakeObservableOptions } from '../core/types/libs/mobx';
 import { ReactHandlers, ReactEvents } from './types/libs/react';
 import { Fetcher } from '../source/core/Fetcher';
-import { TimeoutExep } from '../source/core/exeptions/TimeoutExep';
 
 type BaseFormFrontConstructor = new (lang: SupportedLangs) => BaseFormFront;
 
@@ -117,7 +116,6 @@ export abstract class BaseFormFront {
         }
     }
 
-    // TODO
     public async sendForm() {
         // Mark form as loading
         this.isRequestAction(true);
@@ -128,23 +126,22 @@ export abstract class BaseFormFront {
         // API request
         const url = Fetcher.getEndpoint(this['apiUri']);
 
-        // It nneeds for timeout handling?
         try {
             const data = (await Fetcher.request(formData, url)) as ActionResult<
-                DataResult<InvalidFormDTO>
+                DataResult<unknown>
             >;
 
             if (data.resultCode === 'invalidForm') {
+                const dto = data.dto as InvalidFormDTO;
+                this.updateErrors(dto);
             }
         } catch (e) {
-            if (e instanceof TimeoutExep) {
-                this.isRequestAction(false);
-
-                //TODO можно показать сообщение таймаута внутри самой формы
+            if (e instanceof Error) {
+                console.error(e.message);
             }
-
-            console.error(e.message);
         }
+
+        this.isRequestAction(false);
 
         // const obj = {
         //     topError: 'Test',
@@ -163,7 +160,7 @@ export abstract class BaseFormFront {
         // });
     }
 
-    public removeErrors() {
+    public resetErrors() {
         if (this.topError) {
             this.updateTopErrorAction('');
         }
@@ -173,11 +170,11 @@ export abstract class BaseFormFront {
         });
     }
 
-    public setErrors(obj: InvalidFormDTO) {
+    public updateErrors(obj: InvalidFormDTO) {
         console.log('---stat set errors');
         console.log(obj);
         if (this.isInvalid) {
-            this.removeErrors();
+            this.resetErrors();
         }
 
         if (obj.topError) {
