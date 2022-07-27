@@ -52,7 +52,8 @@ export interface IRequest extends FastifyObjects.IReq {
 
 /**
  * Вариант контекста для формы, при котором body присутствует
- * обязательно
+ * обязательно и содержит список полей, которые должны были
+ * поступить от клиента
  */
 type ActionContextForm<Fields extends string> = ActionContext & {
     body: Record<Fields, IFormDescription>;

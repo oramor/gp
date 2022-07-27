@@ -1,13 +1,16 @@
 import { FormException } from './exeptions/FormException';
 import { GlobalContext, ActionContextForm } from './types/utils';
 
-type FormConstructor = new (
+type BaseFormConstructor = new (
     g: GlobalContext,
     ctx: ActionContextForm<FormSchemaFields>,
 ) => BaseFormServ<FormSchemaFields>;
 
-export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaFields> {
-    abstract schema: FormSchema<Fields>;
+export abstract class BaseFormServ<
+    Fields extends FormSchemaFields = FormSchemaFields,
+    MatchedFields extends string = Fields,
+> {
+    abstract schema: FormSchema<Fields, MatchedFields>;
     protected g: GlobalContext;
     protected ctx: ActionContextForm<Fields>;
 
@@ -16,9 +19,9 @@ export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaF
      * на стороне сервера (form.firstName). Названия некоторых
      * полей на бекенды может отличаться от их названия на фронте
      */
-    private validFields: Record<string, string> = {};
+    public validFields: { [key in MatchedFields]?: string } = {};
     private invalids: InvalidFormDTO = {};
-    constructor(...args: ConstructorParameters<FormConstructor>) {
+    constructor(...args: ConstructorParameters<BaseFormConstructor>) {
         this.g = args[0];
         this.ctx = args[1];
     }
@@ -27,7 +30,7 @@ export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaF
         return this.validFields;
     }
 
-    addValidField(outputFieldName: string, v: any) {
+    addValidField(outputFieldName: MatchedFields, v: any) {
         this.validFields[outputFieldName] = v;
     }
 
@@ -153,7 +156,9 @@ export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaF
                 /**
                  * Пробуем получить код парсера для данного матчинга
                  */
-                const parserType = matchingRules[outputFieldName]['parser'];
+                const node = matchingRules[outputFieldName] as FormSchemaMatchingNode;
+
+                const parserType = node['parser'];
                 if (parserType) {
                     const parser = this.g.parser.parserFactory(parserType);
                     isMatched = parser(value);
@@ -189,7 +194,7 @@ export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaF
                  * последовательно применяя нормалайзеры, которые модифицируют
                  * значение, полученное от клиента
                  */
-                const normalizers = matchingRules[outputFieldName]['normalizers'];
+                const normalizers = node['normalizers'];
                 if (normalizers) {
                     normalizers.reduce((acc, normalizerType) => {
                         const normalizer = this.g.normalizer.normalizerFactory(normalizerType);
@@ -197,11 +202,11 @@ export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaF
                     }, value);
                 }
 
-                const validatorType = rule.matching[outputFieldName]['validator'];
+                const validatorType = node['validator'];
                 if (validatorType) {
                     const validator = this.g.validator.validatorFactory(validatorType);
                     if (validator(value)) {
-                        this.addValidField(outputFieldName, value);
+                        this.addValidField(outputFieldName as MatchedFields, value);
                         continue main;
                     }
 

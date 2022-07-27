@@ -1,6 +1,7 @@
 export type LoginFormFields = 'login' | 'password';
+export type LoginFormFieldsServ = 'email' | 'password';
 
-export const LoginFormSchema: FormSchema<LoginFormFields> = {
+export const LoginFormSchema: FormSchema<LoginFormFields, LoginFormFieldsServ> = {
     login: {
         title: {
             ru: 'Логин',
@@ -11,8 +12,8 @@ export const LoginFormSchema: FormSchema<LoginFormFields> = {
             en: 'Email or phone',
         },
         errors: {
-            ru: '',
-            en: '',
+            ru: 'Некорректный логин',
+            en: 'Incorrect login',
         },
         matching: {
             email: {
@@ -29,12 +30,11 @@ export const LoginFormSchema: FormSchema<LoginFormFields> = {
             en: 'Password',
         },
         errors: {
-            ru: '',
-            en: '',
+            ru: 'Некорректный пароль',
+            en: 'Incorrect password',
         },
         matching: {
             password: {
-                parser: 'default',
                 validator: 'password',
             },
         },

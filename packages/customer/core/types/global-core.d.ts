@@ -49,21 +49,29 @@ type DictionaryObject = Record<string, DictionaryNode>;
 //     };
 // };
 
-type FormSchemaNode = {
+type FormSchemaMatchingNode = {
+    parser?: Parsers;
+    normalizers?: Normalizers[];
+    validator?: Validators;
+};
+
+type FormSchemaNode<T extends string> = {
     title: DictionaryNode;
     errors: DictionaryNode;
     required: boolean;
     matching: {
-        [key: string]: {
-            parser?: Parsers;
-            normalizers?: Normalizers[];
-            validator?: Validators;
-        };
+        [key in T]?: FormSchemaMatchingNode;
     };
     placeholder?: DictionaryNode;
 };
 
-type FormSchema<T extends FormSchemaFields> = Record<T, FormSchemaNode>;
+/**
+ * В параметр M передаются поля матчинга. Именно эти поля будут
+ * видны в серверном инстансе формы. По умолчанию поля матчатся 1к1,
+ * поэтому, если второй параметр не указан, матчинг-поля будут
+ * такими же, как в корне схемы.
+ */
+type FormSchema<T extends FormSchemaFields, M extends string = T> = Record<T, FormSchemaNode<M>>;
 
 /**
  * Объект, который хранит стейт поля формы
