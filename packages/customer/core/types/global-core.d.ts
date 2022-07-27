@@ -96,3 +96,23 @@ type FormFieldComputed = {
  * зависит схема и классы BaseFormServ, BaseFormFront
  */
 type FormSchemaFields = string;
+
+/**
+ * Actions
+ */
+type ActionResultCode = 'data' | 'render';
+
+type AbstractActionResult = {
+    resultCode: ActionResultCode;
+    httpStatus: HttpStatus;
+};
+
+interface DataResult {
+    json: JsonObject;
+}
+
+interface PageResult {
+    htmlPromise: Promise<string>;
+}
+
+type ActionResult<T extends DataResult | PageResult> = AbstractActionResult & T;

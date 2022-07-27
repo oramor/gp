@@ -1,23 +1,6 @@
 import { GlobalContext, ActionContext } from './types/utils';
 import { BasePageServ } from './BasePageServ';
 
-type ActionResultCode = 'data' | 'render';
-
-type AbstractActionResult = {
-    resultCode: ActionResultCode;
-    httpStatus: HttpStatus;
-};
-
-export interface DataResult {
-    json: JsonObject;
-}
-
-export interface PageResult {
-    htmlPromise: Promise<string>;
-}
-
-export type ActionResult<T extends DataResult | PageResult> = AbstractActionResult & T;
-
 export type ActionConstructor = new (g: GlobalContext, ctx: ActionContext) => BaseAction;
 
 export abstract class BaseAction {

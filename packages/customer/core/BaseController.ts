@@ -1,5 +1,5 @@
 import { GlobalContext, ActionContext, IRequest } from './types/utils';
-import { ActionResult, DataResult, PageResult, BaseAction, ActionConstructor } from './BaseAction';
+import { BaseAction, ActionConstructor } from './BaseAction';
 import { BaseUri } from './BaseUri';
 import { ActionError } from './errors/ActionError';
 import { BaseExeption } from './BaseExeption';
