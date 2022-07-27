@@ -1,0 +1,48 @@
+@use "../../../fw.scss";
+
+.st-c-alert {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    ._container {
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        @include fw.screen(tablet) {
+            width: 70%;
+            margin-top: 10px;
+        }
+        @include fw.screen(phone) {
+            width: 90%;
+            margin-top: 5px;
+        }
+    }
+    ._item {
+        display: grid;
+        grid-template-columns: 1fr max-content;
+        margin-top: 10px;
+        padding: 10px;
+        background-color: fw.$col-alert-bg;
+        border-radius: 5px;
+        z-index: 1000;
+        box-shadow: 0 0 15px #00000040;
+        transition: opacity 0.5s;
+    }
+    ._message {
+        grid-column: 1/2;
+        align-self: center;
+        @include fw.font(ar);
+        color: fw.$col-alert-txt;
+    }
+    ._remove {
+        grid-column: 2/3;
+        align-self: flex-start;
+        background: center no-repeat url(./components-js/Alert/img/cross.svg);
+        cursor: pointer;
+        appearance: none;
+        border: none;
+        width: 25px;
+        height: 25px;
+    }
+}
