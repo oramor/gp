@@ -1,3 +1,4 @@
+import { FormException } from './exeptions/FormException';
 import { GlobalContext, ActionContextForm } from './types/utils';
 
 type FormConstructor = new (
@@ -16,7 +17,6 @@ export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaF
      * полей на бекенды может отличаться от их названия на фронте
      */
     private validFields: Record<string, string> = {};
-    //private fieldErrors: Record<string, string> = {};
     private invalids: InvalidFormDTO = {};
     constructor(...args: ConstructorParameters<FormConstructor>) {
         this.g = args[0];
@@ -42,8 +42,6 @@ export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaF
             name: fieldName,
             message,
         });
-
-        //this.fieldErrors[fieldName] = message;
     }
 
     requiredReport(fieldName: Fields) {
@@ -228,6 +226,16 @@ export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaF
                     this.addValidField(outputFieldName, value);
                 }
             }
+        }
+
+        /**
+         * При наличии ошибок, бросаем исключение, которое обрабатывается
+         * в контроллере. Можно было бы ограничиться инвалидным статусом
+         * у формы, но в этом случае пришлось бы в каждом экшене делать
+         * проверку вида if (form.isInvalid) ...
+         */
+        if (Object.keys(this.invalids).length > 0) {
+            throw new FormException(this.g, this.ctx, this.invalids);
         }
     }
 }
