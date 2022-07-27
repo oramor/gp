@@ -1,4 +1,5 @@
 import { BaseUri, UriConstructor } from '../../core/BaseUri';
+import { siteURI } from './SiteStatic';
 
 export class SiteUri extends BaseUri {
     constructor(...args: ConstructorParameters<UriConstructor>) {
@@ -6,6 +7,6 @@ export class SiteUri extends BaseUri {
     }
 
     public get index() {
-        return '/';
+        return siteURI.index;
     }
 }
