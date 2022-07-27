@@ -16,7 +16,8 @@ export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaF
      * полей на бекенды может отличаться от их названия на фронте
      */
     private validFields: Record<string, string> = {};
-    private fieldErrors: Record<string, string> = {};
+    //private fieldErrors: Record<string, string> = {};
+    private invalids: InvalidFormDTO = {};
     constructor(...args: ConstructorParameters<FormConstructor>) {
         this.g = args[0];
         this.ctx = args[1];
@@ -31,7 +32,18 @@ export abstract class BaseFormServ<Fields extends FormSchemaFields = FormSchemaF
     }
 
     addFieldError(fieldName: Fields, message: string) {
-        this.fieldErrors[fieldName] = message;
+        const fieldErrors = this.invalids.fieldErrors;
+
+        if (!fieldErrors) {
+            this.invalids.fieldErrors = [];
+        }
+
+        fieldErrors?.push({
+            name: fieldName,
+            message,
+        });
+
+        //this.fieldErrors[fieldName] = message;
     }
 
     requiredReport(fieldName: Fields) {

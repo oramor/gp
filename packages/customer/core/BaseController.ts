@@ -97,8 +97,8 @@ export abstract class BaseController<T extends BaseUri> {
 
                 switch (result.resultCode) {
                     case 'data': {
-                        const rs = result as ActionResult<DataResult>;
-                        return res.send(rs.json);
+                        const rs = result as ActionResult<DataResult<DefaultDTO>>;
+                        return res.send(rs.dto);
                     }
                     case 'render': {
                         const rs = result as ActionResult<PageResult>;

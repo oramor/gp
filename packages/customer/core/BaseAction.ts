@@ -4,7 +4,7 @@ import { BasePageServ } from './BasePageServ';
 export type ActionConstructor = new (g: GlobalContext, ctx: ActionContext) => BaseAction;
 
 export abstract class BaseAction {
-    abstract run(): Promise<ActionResult<DataResult | PageResult>>;
+    abstract run(): Promise<ActionResult<DataResult<unknown> | PageResult>>;
     protected g: GlobalContext;
     protected ctx: ActionContext;
     constructor(...args: ConstructorParameters<ActionConstructor>) {
@@ -12,11 +12,11 @@ export abstract class BaseAction {
         this.ctx = args[1];
     }
 
-    public data(obj: JsonObject): ActionResult<DataResult> {
+    public data(obj: JsonObject): ActionResult<DataResult<DefaultDTO>> {
         return {
             resultCode: 'data',
             httpStatus: 200,
-            json: obj,
+            dto: obj,
         };
     }
 

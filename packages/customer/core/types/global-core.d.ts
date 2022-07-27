@@ -100,19 +100,33 @@ type FormSchemaFields = string;
 /**
  * Actions
  */
-type ActionResultCode = 'data' | 'render';
+type ActionResultCode = 'data' | 'render' | 'invalidForm';
 
 type AbstractActionResult = {
     resultCode: ActionResultCode;
     httpStatus: HttpStatus;
 };
 
-interface DataResult {
-    json: JsonObject;
+interface DataResult<T extends DefaultDTO | InvalidFormDTO | unknown> {
+    dto: T;
 }
 
 interface PageResult {
     htmlPromise: Promise<string>;
 }
 
-type ActionResult<T extends DataResult | PageResult> = AbstractActionResult & T;
+type ActionResult<T extends DataResult<unknown> | PageResult> = AbstractActionResult & T;
+
+/**
+ * DTO is a data transfer objects. It means objects which transfers
+ * between backend and frontend
+ */
+type DefaultDTO = JsonObject;
+
+interface InvalidFormDTO {
+    topError?: string;
+    fieldErrors?: Array<{
+        name: string;
+        message: string;
+    }>;
+}

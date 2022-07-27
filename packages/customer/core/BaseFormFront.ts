@@ -1,17 +1,13 @@
 import { makeObservable, action, observable, computed } from 'mobx';
 import { MakeObservableOptions } from '../core/types/libs/mobx';
 import { ReactHandlers, ReactEvents } from './types/libs/react';
+import { Fetcher } from '../source/core/Fetcher';
+import { TimeoutExep } from '../source/core/exeptions/TimeoutExep';
 
 type BaseFormFrontConstructor = new (lang: SupportedLangs) => BaseFormFront;
-interface IInvalidFormResponse {
-    topError?: string;
-    fieldErrors?: Array<{
-        name: string;
-        message: string;
-    }>;
-}
 
 export abstract class BaseFormFront {
+    abstract apiUrl: string;
     [key: string]: any;
     protected lang: SupportedLangs;
     public isRequest = false;
@@ -98,7 +94,7 @@ export abstract class BaseFormFront {
         this[oName]['value'] = value;
     }
 
-    private get formData() {
+    private async getFormData() {
         const formData = new FormData();
 
         Object.keys(this).forEach((str) => {
@@ -122,27 +118,49 @@ export abstract class BaseFormFront {
     }
 
     // TODO
-    public sendForm() {
+    public async sendForm() {
         // Mark form as loading
         this.isRequestAction(true);
 
-        //console.log(this.formData.get('login'));
+        // Get field values
+        const formData = await this.getFormData();
 
-        const obj = {
-            topError: 'Test',
-            fieldErrors: [{ name: 'login', message: `test message: ${Math.random()}` }],
-        };
+        // API request
+        const url = Fetcher.getEndpoint(this['apiUri']);
 
-        const rs = new Promise((resolve) => {
-            console.log('start promise');
-            setTimeout(() => resolve(obj), 1000);
-        });
+        // It nneeds for timeout handling?
+        try {
+            const data = (await Fetcher.request(formData, url)) as ActionResult<
+                DataResult<InvalidFormDTO>
+            >;
 
-        rs.then((obj) => {
-            this.setErrors(obj as IInvalidFormResponse);
-            console.log('end promise');
-            this.isRequestAction(false);
-        });
+            if (data.resultCode === 'invalidForm') {
+            }
+        } catch (e) {
+            if (e instanceof TimeoutExep) {
+                this.isRequestAction(false);
+
+                //TODO можно показать сообщение таймаута внутри самой формы
+            }
+
+            console.error(e.message);
+        }
+
+        // const obj = {
+        //     topError: 'Test',
+        //     fieldErrors: [{ name: 'login', message: `test message: ${Math.random()}` }],
+        // };
+
+        // const rs = new Promise((resolve) => {
+        //     console.log('start promise');
+        //     setTimeout(() => resolve(obj), 1000);
+        // });
+
+        // rs.then((obj) => {
+        //     this.setErrors(obj as IInvalidFormResponse);
+        //     console.log('end promise');
+        //     this.isRequestAction(false);
+        // });
     }
 
     public removeErrors() {
@@ -155,7 +173,7 @@ export abstract class BaseFormFront {
         });
     }
 
-    public setErrors(obj: IInvalidFormResponse) {
+    public setErrors(obj: InvalidFormDTO) {
         console.log('---stat set errors');
         console.log(obj);
         if (this.isInvalid) {
