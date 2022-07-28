@@ -22,6 +22,7 @@ export class FastifyServer {
          * Dynamic import
          */
         this.engine.register(import('@fastify/multipart'), {
+            attachFieldsToBody: true,
             limits: {
                 fieldNameSize: 150, // Max field name size in bytes
                 fieldSize: 5120, // Max field value size in bytes (5Kb)

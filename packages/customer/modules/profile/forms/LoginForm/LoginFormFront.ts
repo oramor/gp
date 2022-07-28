@@ -3,7 +3,7 @@ import { LoginFormSchema, LoginFormFields } from './LoginFormSchema';
 import { profileURI } from '../../ProfileStatic';
 
 export class LoginFormFront extends BaseFormFront {
-    apiUrl: string = profileURI.login;
+    apiURI: string = profileURI.login;
     _login: FormFieldState = {
         ...LoginFormSchema['login'],
         value: '',

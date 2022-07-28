@@ -88,9 +88,15 @@ export abstract class BaseController<T extends BaseUri> {
                 res,
             };
 
-            const data = await req.file();
-            console.log('-----------');
-            console.log(data);
+            console.log('isMultipart--------------', req.isMultipart());
+            if (req.isMultipart()) {
+                console.log('-----------multipart');
+                const data = await req.file();
+                console.log('-----------file: ', data);
+                console.log('---------fields: ', req.body);
+                //  console.log('--------context: ', req.context);
+                //console.log('------------req: ', req);
+            }
 
             try {
                 const actionInst: BaseAction = new actionClass(this.g, ctx);

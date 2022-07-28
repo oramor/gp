@@ -3,7 +3,8 @@ import { TimeoutExep } from './exeptions/TimeoutExep';
 
 export class Fetcher {
     public static getEndpoint(uri: string) {
-        return new URL(uri, CONFIG.baseApiUrl).href;
+        const url = new URL(uri, CONFIG.baseApiUrl).href;
+        return url;
     }
 
     public static async request(
@@ -11,12 +12,14 @@ export class Fetcher {
         url: string,
         timeout = CONFIG.defaultFetcherTimeout,
     ) {
+        console.log(obj, url);
         /**
          * В тело запроса может передаваться экземпляр объекта FormData. Такой запрос поступит
          * на сервер в формате multipart/form-data, который парсится, например, через Multer
          */
         const body = obj instanceof FormData ? obj : JSON.stringify(obj);
 
+        console.log('------------1');
         const rs = Promise.race([
             fetch(url, {
                 method: 'POST',
@@ -28,8 +31,10 @@ export class Fetcher {
         ]);
 
         try {
+            console.log('------------2');
             const result: Response = await rs;
 
+            console.log('------------3');
             const data: ActionResult<DataResult<unknown>> = await result.json();
             //const data = await result.json();
 

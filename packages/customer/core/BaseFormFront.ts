@@ -6,7 +6,7 @@ import { Fetcher } from '../source/core/Fetcher';
 type BaseFormFrontConstructor = new (lang: SupportedLangs) => BaseFormFront;
 
 export abstract class BaseFormFront {
-    abstract apiUrl: string;
+    abstract apiURI: string;
     [key: string]: any;
     protected lang: SupportedLangs;
     public isRequest = false;
@@ -123,8 +123,12 @@ export abstract class BaseFormFront {
         // Get field values
         const formData = await this.getFormData();
 
+        for (const key of formData.keys()) {
+            console.log('---------formDataKeys: ', key, ' value: ', formData.get(key));
+        }
+
         // API request
-        const url = Fetcher.getEndpoint(this['apiUri']);
+        const url = Fetcher.getEndpoint(this['apiURI']);
 
         try {
             const data = (await Fetcher.request(formData, url)) as ActionResult<

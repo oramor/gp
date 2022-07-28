@@ -1,12 +1,12 @@
 import { BaseController, ControllerConstructor } from '../../core/BaseController';
-import { SiteUri } from './SiteUri';
+import { SiteURI } from './SiteURI';
 import { IndexGET } from './actions/IndexGET';
 
-export class SiteController extends BaseController<SiteUri> {
-    public urls: SiteUri;
+export class SiteController extends BaseController<SiteURI> {
+    public urls: SiteURI;
     constructor(...args: ConstructorParameters<ControllerConstructor>) {
         super(...args);
-        this.urls = new SiteUri(this.g);
+        this.urls = new SiteURI(this.g);
         this.setRoute(this.urls.index, [IndexGET]);
     }
 }

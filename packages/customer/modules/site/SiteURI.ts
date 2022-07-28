@@ -1,7 +1,7 @@
 import { BaseUri, UriConstructor } from '../../core/BaseUri';
 import { siteURI } from './SiteStatic';
 
-export class SiteUri extends BaseUri {
+export class SiteURI extends BaseUri {
     constructor(...args: ConstructorParameters<UriConstructor>) {
         super(...args);
     }

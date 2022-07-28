@@ -12,6 +12,7 @@ import { LangHandler } from './core/defaults/handlers/LangHandler';
 
 // Controllers
 import { SiteController } from './modules/site/SiteController';
+import { ProfileController } from './modules/profile/ProfileController';
 
 const config: Config = {
     port: 3000,
@@ -40,7 +41,7 @@ globalContextFactory()
         const server = new FastifyServer(g);
 
         server.setPreHandlers([LangHandler]);
-        server.setControllers([SiteController]);
+        server.setControllers([SiteController, ProfileController]);
         server.start();
 
         process

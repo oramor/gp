@@ -9,6 +9,7 @@ export class LoginPOST extends BaseAction {
     }
     async run() {
         const form = new LoginFormServ(this.g, this.ctx as ActionContextForm<LoginFormFields>);
+        console.log('Action ------------------------------');
         console.log(form.fields.email);
         console.log(form.fields.password);
 
