@@ -36,6 +36,8 @@ export namespace FastifyHandlers {
 }
 
 export namespace FastifyObjects {
+    //export type IMultipartFormData = {};
+
     /**
      * Объект запроса
      */

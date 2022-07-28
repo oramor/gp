@@ -88,6 +88,10 @@ export abstract class BaseController<T extends BaseUri> {
                 res,
             };
 
+            const data = await req.file();
+            console.log('-----------');
+            console.log(data);
+
             try {
                 const actionInst: BaseAction = new actionClass(this.g, ctx);
                 const result = await actionInst.run();

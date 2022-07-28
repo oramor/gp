@@ -3,6 +3,9 @@
 yarn add -D dotenv
 ```
 
+# Fastify
+yarn add @fastify/multipart
+
 # TS
 ```
 yarn add -D typescript ts-node @types/node ts-loader

@@ -176,7 +176,7 @@ export abstract class BaseFormServ<
                  * счетчик и переходим к следующему
                  */
                 if (!isMatched) {
-                    counter--;
+                    --counter;
 
                     /**
                      * Если матчинги закончились, переходим к следующему
@@ -214,7 +214,7 @@ export abstract class BaseFormServ<
                      * Уменьшаем счетчик попыток матчинга, т.к. по итогу,
                      * не смотря на валиднось парсеру, валидация провалилась.
                      */
-                    counter--;
+                    --counter;
 
                     if (counter === 0) {
                         /**

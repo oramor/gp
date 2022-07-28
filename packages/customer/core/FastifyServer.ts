@@ -19,6 +19,20 @@ export class FastifyServer {
         this.preHandlers = [];
 
         /**
+         * Dynamic import
+         */
+        this.engine.register(import('@fastify/multipart'), {
+            limits: {
+                fieldNameSize: 150, // Max field name size in bytes
+                fieldSize: 5120, // Max field value size in bytes (5Kb)
+                fields: 100, // Max number of non-file fields
+                fileSize: 2_097_152, // 2 Mb
+                files: 10, // Max number of file fields
+                headerPairs: 2000, // Max number of header key=>value pairs
+            },
+        });
+
+        /**
          * Объект любого запроса безусловно расширяется транзитным свойством locals.
          * Оно используется для передачи данных локального контекста
          * между обработчиками. Из этих данных в контроллере формируется
