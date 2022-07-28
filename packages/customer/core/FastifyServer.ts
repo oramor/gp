@@ -22,6 +22,10 @@ export class FastifyServer {
          * Dynamic import
          */
         this.engine.register(import('@fastify/multipart'), {
+            /**
+             * Этот параметр указывает, что поля будут
+             * помещаться в body
+             */
             attachFieldsToBody: true,
             limits: {
                 fieldNameSize: 150, // Max field name size in bytes

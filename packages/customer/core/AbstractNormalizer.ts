@@ -1,14 +1,6 @@
-/**
- * По дефолту функция возвращает тот же тип значения, что и принимает (R = T)
- */
-
-// export type NormalizerDelegate<
-//     T extends string | number = string,
-//     R extends string | number = T,
-// > = (v: T) => R;
-
-export type NormalizerDelegate<T extends string | number> = (v: T) => T;
+// TODO сейчас нормализаторы возвращают только строковые значения, иначе возникает проблема с редбюсером нормализатора
+export type NormalizerDelegate = (v: string | number) => string;
 
 export abstract class AbstractNormalizer {
-    abstract normalizerFactory(type: Normalizers): NormalizerDelegate<string | number>;
+    abstract normalizerFactory(type: Normalizers): NormalizerDelegate;
 }

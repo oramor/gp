@@ -16,13 +16,13 @@ export class Normalizer extends AbstractNormalizer {
         if (typeof v === 'string') {
             return v.toLowerCase();
         }
-        return v;
+        return v.toString();
     }
 
     private removeSpaces(v: string | number) {
         if (typeof v === 'string') {
             return v.replace(/\s+/g, '');
         }
-        return v;
+        return v.toString();
     }
 }

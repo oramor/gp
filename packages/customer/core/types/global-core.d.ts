@@ -133,7 +133,7 @@ type DefaultDTO = JsonObject;
 
 interface InvalidFormDTO {
     topError?: string;
-    fieldErrors?: Array<{
+    fields?: Array<{
         name: string;
         message: string;
     }>;

@@ -3,15 +3,21 @@ import { AbstractValidator } from '../core/AbstractValidator';
 export class Validator extends AbstractValidator {
     public validatorFactory(type: Validators) {
         switch (type) {
-            case 'string':
-                return this.isString;
+            case 'email':
+                return this.isEmail;
+            case 'password':
+                return this.isPassword;
             default:
                 throw Error(`Not found validator with type ${type}`);
         }
     }
 
-    private isString(v: any) {
-        if (typeof v === 'string') return true;
-        return false;
+    private isEmail(v: string) {
+        const regex = /^(.+)@(\S+)$/;
+        return regex.test(v);
+    }
+
+    private isPassword(v: string) {
+        return v.length < 2 ? true : false;
     }
 }

@@ -1,9 +1,9 @@
 import { FormException } from './exeptions/FormException';
-import { GlobalContext, ActionContextForm } from './types/utils';
+import { GlobalContext, ActionContext, BodyFormFieldNode } from './types/utils';
 
-type BaseFormConstructor = new (
+export type BaseFormConstructor = new (
     g: GlobalContext,
-    ctx: ActionContextForm<FormSchemaFields>,
+    ctx: ActionContext,
 ) => BaseFormServ<FormSchemaFields>;
 
 export abstract class BaseFormServ<
@@ -12,94 +12,50 @@ export abstract class BaseFormServ<
 > {
     abstract schema: FormSchema<Fields, MatchedFields>;
     protected g: GlobalContext;
-    protected ctx: ActionContextForm<Fields>;
+    protected ctx: ActionContext;
+
+    public isInvalid = false;
 
     /**
-     * Это поля, которые  доступны при работе с объектом формы
+     * Это поля, которые доступны при работе с объектом формы
      * на стороне сервера (form.firstName). Названия некоторых
      * полей на бекенды может отличаться от их названия на фронте
      */
-    public validFields: { [key in MatchedFields]?: string } = {};
-    private invalids: InvalidFormDTO = {};
+    private validFields: { [key in MatchedFields]?: string } = {};
+    private invalidFields: InvalidFormDTO['fields'] = [];
+    private topError: InvalidFormDTO['topError'] | undefined;
     constructor(...args: ConstructorParameters<BaseFormConstructor>) {
         this.g = args[0];
         this.ctx = args[1];
     }
 
-    get fields() {
-        return this.validFields;
-    }
-
-    addValidField(outputFieldName: MatchedFields, v: any) {
-        this.validFields[outputFieldName] = v;
-    }
-
-    addFieldError(fieldName: Fields, message: string) {
-        const fieldErrors = this.invalids.fieldErrors;
-
-        if (!fieldErrors) {
-            this.invalids.fieldErrors = [];
+    public get invalids(): InvalidFormDTO {
+        const obj = {} as InvalidFormDTO;
+        if (this.topError) {
+            obj['topError'] = this.topError;
         }
 
-        fieldErrors?.push({
-            name: fieldName,
-            message,
-        });
+        if (this.invalidFields) {
+            obj['fields'] = this.invalidFields;
+        }
+
+        return obj;
     }
 
-    requiredReport(fieldName: Fields) {
-        const messages: DictionaryNode = {
-            ru: 'Это поле необходимо заполнить',
-            en: 'This field is required',
-        };
-        const lang = this.ctx.lang;
-        this.addFieldError(fieldName, messages[lang]);
-    }
+    public async init() {
+        const req = this.ctx.req;
 
-    notValidatedReport(fieldName: Fields) {
-        const errors = this['schema'][fieldName]['errors'];
-        const lang = this.ctx.lang;
-        this.addFieldError(fieldName, errors[lang]);
-    }
+        if (!req.isMultipart()) {
+            throw Error('Not multipart');
+        }
 
-    notMatchingRulesReport(fieldName: Fields) {
-        const messages: DictionaryNode = {
-            ru: 'Найдено правил обработки для данного поля',
-            en: 'Not found matching rules for this field',
-        };
-        const lang = this.ctx.lang;
-        this.addFieldError(fieldName, messages[lang]);
-    }
+        /**
+         * Parse multipart to body
+         */
+        await req.file();
+        console.log('fields---------', req.body);
 
-    notMatchedReport(fieldName: Fields) {
-        const messages: DictionaryNode = {
-            ru: 'Не удалось распознать значение в этом поле',
-            en: 'This field does not matched',
-        };
-        const lang = this.ctx.lang;
-        this.addFieldError(fieldName, messages[lang]);
-    }
-
-    notFoundInSchemaReport(fieldName: Fields) {
-        const messages: DictionaryNode = {
-            ru: 'Поле отсутствует в схеме',
-            en: 'Not found in schema',
-        };
-        const lang = this.ctx.lang;
-        this.addFieldError(fieldName, messages[lang]);
-    }
-
-    notFoundInBodyReport(fieldName: Fields) {
-        const messages: DictionaryNode = {
-            ru: 'Значение ожидалось, но не получено от клиента',
-            en: 'This value did not got from client',
-        };
-        const lang = this.ctx.lang;
-        this.addFieldError(fieldName, messages[lang]);
-    }
-
-    protected make() {
-        const body = this.ctx.body;
+        const body = req.body as Record<Fields, BodyFormFieldNode>;
         if (!body) {
             throw Error('Not found body');
         }
@@ -113,6 +69,7 @@ export abstract class BaseFormServ<
             }
 
             const { value } = body[fieldName];
+            console.log('typeof value------------', typeof value);
             if (!value) {
                 this.notFoundInBodyReport(fieldName);
                 continue;
@@ -233,14 +190,93 @@ export abstract class BaseFormServ<
             }
         }
 
+        console.log('Invalids-----------', this.invalidFields);
+        console.log('Fields-------------', this.fields);
         /**
          * При наличии ошибок, бросаем исключение, которое обрабатывается
          * в контроллере. Можно было бы ограничиться инвалидным статусом
          * у формы, но в этом случае пришлось бы в каждом экшене делать
          * проверку вида if (form.isInvalid) ...
          */
-        if (Object.keys(this.invalids).length > 0) {
+        if (this.isInvalid) {
             throw new FormException(this.g, this.ctx, this.invalids);
         }
+
+        return this;
+    }
+
+    public get fields() {
+        return this.validFields;
+    }
+
+    public setTopError(message: string) {
+        this.isInvalid = true;
+        this.topError = message;
+    }
+
+    private addValidField(outputFieldName: MatchedFields, v: any) {
+        this.validFields[outputFieldName] = v;
+    }
+
+    private addInvalidField(fieldName: Fields, message: string) {
+        this.isInvalid = true;
+
+        console.log('invalid add------', fieldName, message);
+
+        this.invalidFields?.push({
+            name: fieldName,
+            message,
+        });
+    }
+
+    private requiredReport(fieldName: Fields) {
+        const messages: DictionaryNode = {
+            ru: 'Это поле необходимо заполнить',
+            en: 'This field is required',
+        };
+        const lang = this.ctx.lang;
+        this.addInvalidField(fieldName, messages[lang]);
+    }
+
+    private notValidatedReport(fieldName: Fields) {
+        const errors = this['schema'][fieldName]['errors'];
+        const lang = this.ctx.lang;
+        this.addInvalidField(fieldName, errors[lang]);
+    }
+
+    private notMatchingRulesReport(fieldName: Fields) {
+        const messages: DictionaryNode = {
+            ru: 'Найдено правил обработки для данного поля',
+            en: 'Not found matching rules for this field',
+        };
+        const lang = this.ctx.lang;
+        this.addInvalidField(fieldName, messages[lang]);
+    }
+
+    private notMatchedReport(fieldName: Fields) {
+        const messages: DictionaryNode = {
+            ru: 'Не удалось распознать значение в этом поле',
+            en: 'This field does not matched',
+        };
+        const lang = this.ctx.lang;
+        this.addInvalidField(fieldName, messages[lang]);
+    }
+
+    private notFoundInSchemaReport(fieldName: Fields) {
+        const messages: DictionaryNode = {
+            ru: 'Поле отсутствует в схеме',
+            en: 'Not found in schema',
+        };
+        const lang = this.ctx.lang;
+        this.addInvalidField(fieldName, messages[lang]);
+    }
+
+    private notFoundInBodyReport(fieldName: Fields) {
+        const messages: DictionaryNode = {
+            ru: 'Значение ожидалось, но не получено от клиента',
+            en: 'This value did not got from client',
+        };
+        const lang = this.ctx.lang;
+        this.addInvalidField(fieldName, messages[lang]);
     }
 }

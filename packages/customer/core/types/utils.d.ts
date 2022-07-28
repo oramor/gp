@@ -16,12 +16,32 @@ export type LocalsObject = {
     lang?: SupportedLangs;
 };
 
+/**
+ * Базовый контекст готовится на уровне контроллера, до обработки
+ * запроса. Затем он может быть расширен (например, добавление
+ * body для форм)
+ */
 export type ActionContext = {
     method: HttpMethods;
     lang: SupportedLangs;
     req: IRequest;
     res: FastifyObjects.IRes;
 };
+
+/**
+ * Объект, в который упаковывается описание каждого поля,
+ * полученного из @fastify/multiform. Эти поля помещаются
+ * в body запроса при условии, что опция attachFieldsToBody
+ * активна
+ */
+interface BodyFormFieldNode {
+    fieldname: string;
+    value: string;
+    mimetype?: string;
+    encoding: string;
+    fieldnameTruncated: boolean;
+    valueTruncated: boolean;
+}
 
 export type Config = Readonly<{
     port: number;
@@ -48,21 +68,4 @@ export type Config = Readonly<{
  */
 export interface IRequest extends FastifyObjects.IReq {
     locals?: LocalsObject;
-}
-
-/**
- * Вариант контекста для формы, при котором body присутствует
- * обязательно и содержит список полей, которые должны были
- * поступить от клиента
- */
-type ActionContextForm<Fields extends string> = ActionContext & {
-    body: Record<Fields, IFormDescription>;
-};
-
-/**
- * Формат объекта с описанием поля формы, который сервер
- * получает от клиента
- */
-interface IFormDescription {
-    value: string | number;
 }

@@ -4,4 +4,4 @@
  */
 type Normalizers = 'lowerCase' | 'removeSpaces';
 type Parsers = 'default' | 'email';
-type Validators = 'string' | 'email' | 'phone' | 'password';
+type Validators = 'email' | 'password';
