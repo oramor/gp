@@ -18,6 +18,7 @@ export class Validator extends AbstractValidator {
     }
 
     private isPassword(v: string) {
-        return v.length < 2 ? true : false;
+        console.log('pass-----------', v);
+        return v.length > 2 ? true : false;
     }
 }

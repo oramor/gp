@@ -110,6 +110,7 @@ export abstract class BaseController<T extends BaseUri> {
                 }
             } catch (exep) {
                 if (exep instanceof BaseExeption) {
+                    console.log('controller---------1');
                     return exep.handle();
                 }
 
@@ -128,6 +129,8 @@ export abstract class BaseController<T extends BaseUri> {
                         : 'Unhandled error';
                     throw exep;
                 }
+
+                console.log('controller---------2');
 
                 throw Error('Unknown exeption');
             }

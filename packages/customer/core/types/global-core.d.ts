@@ -115,6 +115,8 @@ type AbstractActionResult = {
     httpStatus: HttpStatus;
 };
 
+type ActionResult<T extends DataResult<unknown> | PageResult> = AbstractActionResult & T;
+
 interface DataResult<T extends DefaultDTO | InvalidFormDTO | unknown> {
     dto: T;
 }
@@ -122,8 +124,6 @@ interface DataResult<T extends DefaultDTO | InvalidFormDTO | unknown> {
 interface PageResult {
     htmlPromise: Promise<string>;
 }
-
-type ActionResult<T extends DataResult<unknown> | PageResult> = AbstractActionResult & T;
 
 /**
  * DTO is a data transfer objects. It means objects which transfers

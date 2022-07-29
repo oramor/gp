@@ -69,7 +69,6 @@ export abstract class BaseFormServ<
             }
 
             const { value } = body[fieldName];
-            console.log('typeof value------------', typeof value);
             if (!value) {
                 this.notFoundInBodyReport(fieldName);
                 continue;
@@ -162,7 +161,9 @@ export abstract class BaseFormServ<
                 const validatorType = node['validator'];
                 if (validatorType) {
                     const validator = this.g.validator.validatorFactory(validatorType);
+                    console.log('validation for------------', value);
                     if (validator(value)) {
+                        console.log('is valid!!------------');
                         this.addValidField(outputFieldName as MatchedFields, value);
                         continue main;
                     }

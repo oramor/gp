@@ -10,9 +10,15 @@ export abstract class BaseFormFront {
     [key: string]: any;
     protected lang: SupportedLangs;
     public isRequest = false;
-    public isInvalid = false;
+    //public isInvalid = false;
     public invalidFields: string[] = [];
     public topError = '';
+
+    public get isInvalid() {
+        const a = this.invalidFields ? true : false;
+        const b = this.topError ? true : false;
+        return a || b;
+    }
 
     /**
      * Observable fields should begin with "_" (for ex. _login)
@@ -32,7 +38,7 @@ export abstract class BaseFormFront {
 
         const obj: MakeObservableOptions = {
             isRequest: observable,
-            isInvalid: observable,
+            isInvalid: computed,
             topError: observable,
             inputUpdateAction: action,
             sendForm: action,
@@ -137,6 +143,7 @@ export abstract class BaseFormFront {
 
             if (data.resultCode === 'invalidForm') {
                 const dto = data.dto as InvalidFormDTO;
+                console.log('invalid data dto-----------', dto);
                 this.updateErrors(dto);
             }
         } catch (e) {
@@ -146,22 +153,6 @@ export abstract class BaseFormFront {
         }
 
         this.isRequestAction(false);
-
-        // const obj = {
-        //     topError: 'Test',
-        //     fieldErrors: [{ name: 'login', message: `test message: ${Math.random()}` }],
-        // };
-
-        // const rs = new Promise((resolve) => {
-        //     console.log('start promise');
-        //     setTimeout(() => resolve(obj), 1000);
-        // });
-
-        // rs.then((obj) => {
-        //     this.setErrors(obj as IInvalidFormResponse);
-        //     console.log('end promise');
-        //     this.isRequestAction(false);
-        // });
     }
 
     public resetErrors() {
@@ -172,24 +163,27 @@ export abstract class BaseFormFront {
         this.invalidFields.forEach((fieldName) => {
             this.updateFieldErrorAction(fieldName, '');
         });
+
+        this.invalidFields = [];
     }
 
     public updateErrors(obj: InvalidFormDTO) {
-        console.log('---stat set errors');
+        console.log('isInvalid-----------1', this.isInvalid);
         console.log(obj);
-        if (this.isInvalid) {
-            this.resetErrors();
-        }
+        this.resetErrors();
 
         if (obj.topError) {
             this.updateTopErrorAction(obj.topError);
         }
 
-        obj.fieldErrors?.forEach((item) => {
+        obj.fields?.forEach((item) => {
             this.updateFieldErrorAction(item.name, item.message);
-            this.invalidFields.push(item.name);
+            if (!this.invalidFields.includes(item.name)) {
+                this.invalidFields.push(item.name);
+            }
         });
 
+        console.log('isInvalid-----------1', this.isInvalid);
         console.log(this.invalidFields);
     }
 
